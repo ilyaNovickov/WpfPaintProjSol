@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfPaintProj"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <DockPanel>
@@ -14,10 +15,24 @@
             <Button Content="Create"/>
             <Separator/>
             <Label>Ширнина</Label>
-            <TextBox PreviewTextInput="NumberValidationTextBox" MinWidth="25"/>
+            <xctk:IntegerUpDown x:Name="widthUpDown" Value="500" Minimum="0"/>
             <Separator/>
             <Label>Высота</Label>
-            <TextBox PreviewTextInput="NumberValidationTextBox" MinWidth="25"/>
+            <xctk:IntegerUpDown x:Name="heightUpDown" Value="500" Minimum="0"/>
+            <Separator/>
+            <Label>Передний план</Label>
+            <Button Content="FOR" Click="ChooseColor_MouseClick" Background="White"/>
+            <Separator/>
+            <Label>Задний план</Label>
+            <Button Content="BGC" Click="ChooseColor_MouseClick" Background="Black"/>
+            <Popup x:Name="popup" StaysOpen="False" Placement="Mouse" Closed="popup_Closed">
+                <StackPanel>
+                    <xctk:ColorCanvas x:Name="colorCanvas"/>
+                    <Button Content="Принять" Click="SelectColor_Click"/>
+                </StackPanel>
+            </Popup>
+           
+
         </ToolBar>
         <Grid>
             <Grid.ColumnDefinitions>
