@@ -41,7 +41,6 @@ namespace WpfPaintProj
         {
             if (!isDraw)
                 return;
-
             switch (selectedShape)
             {
                 case null:
