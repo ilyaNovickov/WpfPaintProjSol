@@ -21,6 +21,8 @@ namespace WpfPaintProj
     /// </summary>
     public partial class MainWindow : Window
     {
+        private object colorSender = null;
+
         private List<Shape> shapes = new List<Shape>(1);
         private bool isDraw = false;
         private StandartShapes? selectedShape = null;
@@ -63,10 +65,22 @@ namespace WpfPaintProj
 
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        #region ChooseColor
+        private void ChooseColor_MouseClick(object sender, RoutedEventArgs e)
         {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
+            popup.IsOpen = !popup.IsOpen;
+            colorSender = sender;
         }
+
+        private void SelectColor_Click(object sender, RoutedEventArgs e)
+        {
+            ((Button)colorSender).Background = new SolidColorBrush(colorCanvas.SelectedColor.Value);
+        }
+
+        private void popup_Closed(object sender, EventArgs e)
+        {
+            colorSender = null;
+        }
+        #endregion
     }
 }
