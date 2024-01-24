@@ -12,7 +12,7 @@
             <Button>asd</Button>
         </Menu>
         <ToolBar DockPanel.Dock="Top">
-            <Button Content="Create"/>
+            <Button Content="Создать" Click="CreateButton_Click"/>
             <Separator/>
             <Label>Ширнина</Label>
             <xctk:IntegerUpDown x:Name="widthUpDown" Value="500" Minimum="0"/>
@@ -21,16 +21,18 @@
             <xctk:IntegerUpDown x:Name="heightUpDown" Value="500" Minimum="0"/>
             <Separator/>
             <Label>Передний план</Label>
-            <Button Content="FOR" Click="ChooseColor_MouseClick" Background="White"/>
+            <!--<Button Content="FOR" Click="ChooseColor_MouseClick" Background="White"/>-->
+            <xctk:ColorPicker x:Name="foreColorPicker" SelectedColor="Black"/>
             <Separator/>
             <Label>Задний план</Label>
-            <Button Content="BGC" Click="ChooseColor_MouseClick" Background="Black"/>
-            <Popup x:Name="popup" StaysOpen="False" Placement="Mouse" Closed="popup_Closed">
+            <!--<Button Content="BGC" Click="ChooseColor_MouseClick" Background="Black"/>-->
+            <xctk:ColorPicker x:Name="bgColorPicker" SelectedColor="White"/>
+            <!--<Popup x:Name="popup" StaysOpen="False" Placement="Mouse" Closed="popup_Closed">
                 <StackPanel>
                     <xctk:ColorCanvas x:Name="colorCanvas"/>
                     <Button Content="Принять" Click="SelectColor_Click"/>
                 </StackPanel>
-            </Popup>
+            </Popup>-->
            
 
         </ToolBar>
@@ -44,12 +46,9 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Column="0" Grid.Row="1" HorizontalScrollBarVisibility="Visible">
-                <Canvas Background="Red"  x:Name="canvas" Mouse.MouseDown="canvas_MouseDown">
-                    <Ellipse Width="100" Height="100" Fill="Yellow" Canvas.Left="450"/>
-                </Canvas>
-            </ScrollViewer>
+            <ScrollViewer Grid.Column="0" Grid.Row="1" x:Name="mainScrollViewer" HorizontalScrollBarVisibility="Auto">
 
+            </ScrollViewer>
             <Grid Grid.Row="2" Grid.Column="2">
                 <Grid.ColumnDefinitions>
 
