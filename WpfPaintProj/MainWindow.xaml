@@ -11,7 +11,12 @@
             <Button>asd</Button>
         </Menu>
         <ToolBar DockPanel.Dock="Top">
+            <Button Content="Create"/>
+            <Separator/>
             <Label>Ширнина</Label>
+            <TextBox PreviewTextInput="NumberValidationTextBox" MinWidth="25"/>
+            <Separator/>
+            <Label>Высота</Label>
             <TextBox PreviewTextInput="NumberValidationTextBox" MinWidth="25"/>
         </ToolBar>
         <Grid>
