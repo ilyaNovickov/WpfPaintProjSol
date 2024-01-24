@@ -61,8 +61,8 @@ namespace WpfPaintProj
                     return;
                 case StandartShapes.Ellipse:
 
-                    //Ellipse ellipse = new Ellipse();
-                    EllipseV ellipse = new EllipseV();
+                    Ellipse ellipse = new Ellipse();
+                   //EllipseV ellipse = new EllipseV();
                     ellipse.Width = widthUpDown.Value.Value;
                     ellipse.Height = heightUpDown.Value.Value;
                     ellipse.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);

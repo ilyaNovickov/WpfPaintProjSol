@@ -26,6 +26,9 @@
             <Label>Задний план</Label>
             <xctk:ColorPicker x:Name="bgColorPicker" SelectedColor="White"/>
         </ToolBar>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock>asd</TextBlock>
+        </StatusBar>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -36,7 +39,7 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Border BorderBrush="Gray" BorderThickness="2" Grid.Column="0" Grid.Row="1">
-                <ScrollViewer  x:Name="mainScrollViewer" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer  x:Name="mainScrollViewer" HorizontalScrollBarVisibility="Auto" Background="Gray">
                     
                 </ScrollViewer>
             </Border>
