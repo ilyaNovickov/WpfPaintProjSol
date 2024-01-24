@@ -23,11 +23,11 @@ namespace WpfPaintProj
     /// </summary>
     public partial class MainWindow : Window
     {
-        private DrawingCanvas canvas = null;
+        private DrawingCanvas drawingCanvas = null;
 
-        private List<Shape> shapes = new List<Shape>(1);
         private bool isDraw = false;
         private StandartShapes? selectedShape = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -35,6 +35,12 @@ namespace WpfPaintProj
 
         private void ShapeButton_Click(object sender, RoutedEventArgs e)
         {
+            if (drawingCanvas != null)
+            {
+                drawingCanvas.CanSelectShapes = false;
+                drawingCanvas.ResetSelectedShape();
+            }
+
             isDraw = true;
             if (sender == ellipseButton)
                 selectedShape = StandartShapes.Ellipse;
@@ -61,16 +67,16 @@ namespace WpfPaintProj
                     ellipse.Height = heightUpDown.Value.Value;
                     ellipse.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
                     ellipse.Stroke = new SolidColorBrush(foreColorPicker.SelectedColor.Value);
-                    Canvas.SetLeft(ellipse, e.GetPosition(canvas).X - ellipse.Width / 2d);
-                    Canvas.SetTop(ellipse, e.GetPosition(canvas).Y - ellipse.Height / 2d);
-                    canvas.AddShape(ellipse);
+                    Canvas.SetLeft(ellipse, e.GetPosition(drawingCanvas).X - ellipse.Width / 2d);
+                    Canvas.SetTop(ellipse, e.GetPosition(drawingCanvas).Y - ellipse.Height / 2d);
+                    drawingCanvas.AddShape(ellipse);
                     
                     break;
             }
 
             isDraw = false;
             selectedShape = null;
-
+            drawingCanvas.CanSelectShapes = true;
         }
 
         #region ChooseColor
@@ -96,10 +102,12 @@ namespace WpfPaintProj
             DrawingCanvas canvas = new DrawingCanvas();
             canvas.Width = 1000;
             canvas.Height = 1000;
+            if (selectedShape != null)
+                canvas.CanSelectShapes = true;
             canvas.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             canvas.MouseDown += canvas_MouseDown;
             mainScrollViewer.Content = canvas;
-            this.canvas = canvas;
+            this.drawingCanvas = canvas;
 
             //OwnShapes.MyWeirdShape tr = new OwnShapes.MyWeirdShape();
 

@@ -12,19 +12,13 @@ namespace WpfPaintProj.OwnShapes
 {
     internal class EllipseV : Shape
     {
-        EllipseGeometry ellipse;
-        public static readonly DependencyProperty TextBoxRProperty = DependencyProperty.Register("TextBoxR", typeof(TextBox), typeof(EllipseV), new FrameworkPropertyMetadata(null));
-        public TextBox TextBox
-        {
-            get { return (TextBox)GetValue(TextBoxRProperty); }
-            set { SetValue(TextBoxRProperty, value); }
-        }
+        EllipseGeometry ellipse = new EllipseGeometry();
+
         public EllipseV()
         {
-            ellipse = new EllipseGeometry();
-
             this.Stroke = Brushes.Gray;
             this.StrokeThickness = 3;
+
         }
         protected override Geometry DefiningGeometry
         {
