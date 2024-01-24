@@ -21,20 +21,10 @@
             <xctk:IntegerUpDown x:Name="heightUpDown" Value="500" Minimum="0"/>
             <Separator/>
             <Label>Передний план</Label>
-            <!--<Button Content="FOR" Click="ChooseColor_MouseClick" Background="White"/>-->
             <xctk:ColorPicker x:Name="foreColorPicker" SelectedColor="Black"/>
             <Separator/>
             <Label>Задний план</Label>
-            <!--<Button Content="BGC" Click="ChooseColor_MouseClick" Background="Black"/>-->
             <xctk:ColorPicker x:Name="bgColorPicker" SelectedColor="White"/>
-            <!--<Popup x:Name="popup" StaysOpen="False" Placement="Mouse" Closed="popup_Closed">
-                <StackPanel>
-                    <xctk:ColorCanvas x:Name="colorCanvas"/>
-                    <Button Content="Принять" Click="SelectColor_Click"/>
-                </StackPanel>
-            </Popup>-->
-           
-
         </ToolBar>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -42,31 +32,34 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.2*"></RowDefinition>
+                <!--<RowDefinition Height="0.2*"></RowDefinition>-->
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
+            <Border BorderBrush="Gray" BorderThickness="2" Grid.Column="0" Grid.Row="1">
+                <ScrollViewer  x:Name="mainScrollViewer" HorizontalScrollBarVisibility="Auto">
+            
+                </ScrollViewer>
+            </Border>
+            <Border BorderBrush="Gray" BorderThickness="2" Grid.Row="2" Grid.Column="2">
+                <Grid >
+                    <Grid.ColumnDefinitions>
 
-            <ScrollViewer Grid.Column="0" Grid.Row="1" x:Name="mainScrollViewer" HorizontalScrollBarVisibility="Auto">
-
-            </ScrollViewer>
-            <Grid Grid.Row="2" Grid.Column="2">
-                <Grid.ColumnDefinitions>
-
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <GroupBox Header="Фигуры" Grid.Row="0" Grid.Column="0">
-                    <ScrollViewer>
-                        <WrapPanel>
-                            <Button Content="Квадрат" MinHeight="0" MinWidth="0"/>
-                            <Button Content="Круг" MinHeight="0" MinWidth="0" x:Name="ellipseButton" Click="ShapeButton_Click"/>
-                            <Button Content="Треугольник" MinHeight="0" MinWidth="0"/>
-                        </WrapPanel>
-                    </ScrollViewer>
-                </GroupBox>
-            </Grid>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="Фигуры" Grid.Row="0" Grid.Column="0">
+                        <ScrollViewer>
+                            <WrapPanel>
+                                <Button Content="Квадрат" MinHeight="0" MinWidth="0"/>
+                                <Button Content="Круг" MinHeight="0" MinWidth="0" x:Name="ellipseButton" Click="ShapeButton_Click"/>
+                                <Button Content="Треугольник" MinHeight="0" MinWidth="0"/>
+                            </WrapPanel>
+                        </ScrollViewer>
+                    </GroupBox>
+                </Grid>
+            </Border>
         </Grid>
     </DockPanel>
 </Window>
