@@ -22,6 +22,7 @@ namespace WpfPaintProj
     public partial class MainWindow : Window
     {
         private object colorSender = null;
+        private Canvas canvas = null;
 
         private List<Shape> shapes = new List<Shape>(1);
         private bool isDraw = false;
@@ -49,12 +50,12 @@ namespace WpfPaintProj
                 case StandartShapes.Ellipse:
 
                     Ellipse ellipse = new Ellipse();
-                    ellipse.Width = 100;
-                    ellipse.Height = 100;
-                    SolidColorBrush solidColorBrush = new SolidColorBrush(Color.FromArgb(255, 255, 255, 0));
-                    ellipse.Fill = solidColorBrush;
-                    Canvas.SetLeft(ellipse, e.GetPosition(canvas).X);
-                    Canvas.SetTop(ellipse, e.GetPosition(canvas).Y);
+                    ellipse.Width = widthUpDown.Value.Value;
+                    ellipse.Height = heightUpDown.Value.Value;
+                    ellipse.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
+                    ellipse.Stroke = new SolidColorBrush(foreColorPicker.SelectedColor.Value);
+                    Canvas.SetLeft(ellipse, e.GetPosition(canvas).X - ellipse.Width / 2d);
+                    Canvas.SetTop(ellipse, e.GetPosition(canvas).Y - ellipse.Height / 2d);
                     canvas.Children.Add(ellipse);
                     break;
             }
@@ -65,21 +66,32 @@ namespace WpfPaintProj
         }
 
         #region ChooseColor
-        private void ChooseColor_MouseClick(object sender, RoutedEventArgs e)
-        {
-            popup.IsOpen = !popup.IsOpen;
-            colorSender = sender;
-        }
+        //private void ChooseColor_MouseClick(object sender, RoutedEventArgs e)
+        //{
+        //    popup.IsOpen = !popup.IsOpen;
+        //    colorSender = sender;
+        //}
 
-        private void SelectColor_Click(object sender, RoutedEventArgs e)
-        {
-            ((Button)colorSender).Background = new SolidColorBrush(colorCanvas.SelectedColor.Value);
-        }
+        //private void SelectColor_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ((Button)colorSender).Background = new SolidColorBrush(colorCanvas.SelectedColor.Value);
+        //}
 
-        private void popup_Closed(object sender, EventArgs e)
-        {
-            colorSender = null;
-        }
+        //private void popup_Closed(object sender, EventArgs e)
+        //{
+        //    colorSender = null;
+        //}
         #endregion
+
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            Canvas canvas = new Canvas();
+            canvas.Width = 1000;
+            canvas.Height = 1000;
+            canvas.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            canvas.MouseDown += canvas_MouseDown;
+            mainScrollViewer.Content = canvas;
+            this.canvas = canvas;
+        }
     }
 }
