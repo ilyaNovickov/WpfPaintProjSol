@@ -21,7 +21,6 @@ namespace WpfPaintProj
     /// </summary>
     public partial class MainWindow : Window
     {
-        private object colorSender = null;
         private Canvas canvas = null;
 
         private List<Shape> shapes = new List<Shape>(1);
