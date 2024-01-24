@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using WpfPaintProj.ExtraControls;
+using WpfPaintProj.OwnShapes;
 
 namespace WpfPaintProj
 {
@@ -21,7 +23,7 @@ namespace WpfPaintProj
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Canvas canvas = null;
+        private DrawingCanvas canvas = null;
 
         private List<Shape> shapes = new List<Shape>(1);
         private bool isDraw = false;
@@ -34,7 +36,12 @@ namespace WpfPaintProj
         private void ShapeButton_Click(object sender, RoutedEventArgs e)
         {
             isDraw = true;
-            selectedShape = StandartShapes.Ellipse;
+            if (sender == ellipseButton)
+                selectedShape = StandartShapes.Ellipse;
+            else if (sender == rectButton)
+                selectedShape = StandartShapes.Rectangele;
+            else if (sender == triangleButton)
+                selectedShape = StandartShapes.Triangle;
         }
 
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
@@ -48,14 +55,16 @@ namespace WpfPaintProj
                     return;
                 case StandartShapes.Ellipse:
 
-                    Ellipse ellipse = new Ellipse();
+                    //Ellipse ellipse = new Ellipse();
+                    EllipseV ellipse = new EllipseV();
                     ellipse.Width = widthUpDown.Value.Value;
                     ellipse.Height = heightUpDown.Value.Value;
                     ellipse.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
                     ellipse.Stroke = new SolidColorBrush(foreColorPicker.SelectedColor.Value);
                     Canvas.SetLeft(ellipse, e.GetPosition(canvas).X - ellipse.Width / 2d);
                     Canvas.SetTop(ellipse, e.GetPosition(canvas).Y - ellipse.Height / 2d);
-                    canvas.Children.Add(ellipse);
+                    canvas.AddShape(ellipse);
+                    
                     break;
             }
 
@@ -84,13 +93,21 @@ namespace WpfPaintProj
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            Canvas canvas = new Canvas();
+            DrawingCanvas canvas = new DrawingCanvas();
             canvas.Width = 1000;
             canvas.Height = 1000;
             canvas.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             canvas.MouseDown += canvas_MouseDown;
             mainScrollViewer.Content = canvas;
             this.canvas = canvas;
+
+            //OwnShapes.MyWeirdShape tr = new OwnShapes.MyWeirdShape();
+
+            //tr.Width = 100;
+            //tr.Height = 100;
+            //tr.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 255));
+
+            //canvas.AddShape(tr);
         }
     }
 }

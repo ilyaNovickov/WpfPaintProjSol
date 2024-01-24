@@ -10,6 +10,6 @@ namespace WpfPaintProj
     {
         Ellipse,
         Rectangele,
-        Triengele
+        Triangle
     }
 }
