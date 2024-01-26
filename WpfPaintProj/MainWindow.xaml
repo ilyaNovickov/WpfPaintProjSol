@@ -27,7 +27,7 @@
             <xctk:ColorPicker x:Name="bgColorPicker" SelectedColor="White"/>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom">
-            <TextBlock>asd</TextBlock>
+            <TextBlock x:Name="optionTextBlock" Text="Курсор"/>
         </StatusBar>
         <Grid>
             <Grid.ColumnDefinitions>
