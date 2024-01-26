@@ -22,6 +22,12 @@ namespace WpfPaintProj.ExtraControls
     {
         private Shape selectedShape = null;
 
+        private Shape selectedControlShape = null;
+
+        private bool isDragging = false;
+
+        private Point oldPoint = new Point(0, 0);
+
         private List<Shape> controlShapes = new List<Shape>(1);
 
         public DrawingCanvas()
@@ -57,6 +63,12 @@ namespace WpfPaintProj.ExtraControls
                     Canvas.SetTop(rect, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - rect.Height / 2d);
 
                     controlShapes.Add(rect);
+
+                    rect.MouseDown += OnMouseDownMoveRect;
+                    //rect.MouseMove += OnMouseMoveRect;
+                    this.Canvas.MouseMove += OnMouseMoveRect;
+                    rect.MouseUp += OnMouseUpRect;
+                    rect.MouseLeave += OnMouseLeaveRect;
 
                     this.Canvas.Children.Add(rect);
                 }
@@ -110,6 +122,41 @@ namespace WpfPaintProj.ExtraControls
             points.Add(point);
 
             return points;
+        }
+
+        private void OnMouseDownMoveRect(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = true;
+            oldPoint = e.GetPosition(Canvas);
+            selectedControlShape = (Shape)sender;
+        }
+
+        private void OnMouseMoveRect(object sender, MouseEventArgs e)
+        {
+            if (!isDragging)
+                return;
+
+            Point pos = e.GetPosition(Canvas);
+
+            Canvas.SetLeft(selectedShape, Canvas.GetLeft(selectedShape) + (pos.X - oldPoint.X));
+            Canvas.SetTop(selectedShape, Canvas.GetTop(selectedShape) + (pos.Y - oldPoint.Y));
+
+            Canvas.SetLeft(selectedControlShape, Canvas.GetLeft(selectedControlShape) + (pos.X - oldPoint.X));
+            Canvas.SetTop(selectedControlShape, Canvas.GetTop(selectedControlShape) + (pos.Y - oldPoint.Y));
+
+            oldPoint = pos;
+            //((Shape)sender)
+        }
+
+        private void OnMouseLeaveRect(object sender, MouseEventArgs e)
+        {
+            //isDragging = false;
+        }
+
+        private void OnMouseUpRect(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = false;
+            selectedControlShape = null;
         }
     }
 }
