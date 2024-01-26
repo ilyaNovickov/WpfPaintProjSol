@@ -54,25 +54,24 @@ namespace WpfPaintProj.ExtraControls
                 {
                     List<Point> points = GetControlPoints(selectedShape);
 
-                    Rectangle rect = new Rectangle();
-                    rect.Width = 10;
-                    rect.Height = 10;
-                    rect.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
-                    rect.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-                    Canvas.SetLeft(rect, Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d -  rect.Width / 2d);
-                    Canvas.SetTop(rect, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - rect.Height / 2d);
+                    GetMoveControlPoint(selectedShape);
 
-                    controlShapes.Add(rect);
 
-                    rect.MouseDown += OnMouseDownMoveRect;
-                    //rect.MouseMove += OnMouseMoveRect;
-                    this.Canvas.MouseMove += OnMouseMoveRect;
-                    rect.MouseUp += OnMouseUpRect;
-                    rect.MouseLeave += OnMouseLeaveRect;
-
-                    this.Canvas.Children.Add(rect);
                 }
             }
+        }
+
+        private void GetMoveControlPoint(Shape shape)
+        {
+            Rectangle rect = new Rectangle();
+            rect.Width = 10;
+            rect.Height = 10;
+            rect.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+            rect.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            Canvas.SetLeft(rect, Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d - rect.Width / 2d);
+            Canvas.SetTop(rect, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - rect.Height / 2d);
+            controlShapes.Add(rect);
+            this.Canvas.Children.Add(rect);
         }
 
         public void AddShape(Shape shape)
@@ -101,7 +100,12 @@ namespace WpfPaintProj.ExtraControls
                     if (res != null)
                     {
                         if (controlShapes.Contains((Shape)res.VisualHit))
+                        {
+                            isDragging = true;
+                            oldPoint = e.GetPosition(Canvas);
+                            selectedControlShape = (Shape)res.VisualHit;
                             return;
+                        }
 
                         this.SelectedShape = (Shape)res.VisualHit;
                         break;
@@ -124,14 +128,19 @@ namespace WpfPaintProj.ExtraControls
             return points;
         }
 
-        private void OnMouseDownMoveRect(object sender, MouseButtonEventArgs e)
+        private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
-            isDragging = true;
-            oldPoint = e.GetPosition(Canvas);
-            selectedControlShape = (Shape)sender;
+            isDragging = false;
+            selectedControlShape = null;
         }
 
-        private void OnMouseMoveRect(object sender, MouseEventArgs e)
+        private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = false;
+            selectedControlShape = null;
+        }
+
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
             if (!isDragging)
                 return;
@@ -145,18 +154,6 @@ namespace WpfPaintProj.ExtraControls
             Canvas.SetTop(selectedControlShape, Canvas.GetTop(selectedControlShape) + (pos.Y - oldPoint.Y));
 
             oldPoint = pos;
-            //((Shape)sender)
-        }
-
-        private void OnMouseLeaveRect(object sender, MouseEventArgs e)
-        {
-            //isDragging = false;
-        }
-
-        private void OnMouseUpRect(object sender, MouseButtonEventArgs e)
-        {
-            isDragging = false;
-            selectedControlShape = null;
-        }
+        }   
     }
 }
