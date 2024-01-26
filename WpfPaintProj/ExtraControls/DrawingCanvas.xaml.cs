@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,7 +24,8 @@ namespace WpfPaintProj.ExtraControls
     {
         private Shape selectedShape = null;
 
-        private Shape selectedControlShape = null;
+        private Shape moveShape = null;
+        private List<Shape> resizeShapes = new List<Shape>(1);
 
         private bool isDragging = false;
 
@@ -53,10 +55,26 @@ namespace WpfPaintProj.ExtraControls
 
                 if (selectedShape != null)
                 {
-                    List<Point> points = GetControlPoints(selectedShape);
-
                     GetMoveControlPoint(selectedShape);
 
+                    //List<Point> points = GetControlPoints(selectedShape);
+                    Rectangle rect = new Rectangle()
+                    {
+                        Width = selectedShape.Width,
+                        Height = selectedShape.Height,
+                        Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
+                        StrokeDashArray = new DoubleCollection() { 4, 4 }
+                    };
+                    rect.SetCanvasPoint(selectedShape.GetCanvasPoint());
+                    controlShapes.Add(rect);
+                    this.Canvas.Children.Add(rect);
+
+                    foreach (Shape shape in selectedShape.GetShapeControlPoints())
+                    {
+                        this.Canvas.Children.Add(shape);
+                        controlShapes.Add(shape);
+                        resizeShapes.Add(shape);
+                    }
 
                 }
             }
@@ -73,6 +91,7 @@ namespace WpfPaintProj.ExtraControls
             Canvas.SetTop(rect, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - rect.Height / 2d);
             controlShapes.Add(rect);
             this.Canvas.Children.Add(rect);
+            moveShape = rect;
         }
 
         public void AddShape(Shape shape)
@@ -102,9 +121,11 @@ namespace WpfPaintProj.ExtraControls
                     {
                         if (controlShapes.Contains((Shape)res.VisualHit))
                         {
-                            isDragging = true;
+                            if (((Shape)res.VisualHit) == moveShape)
+                                isDragging = true;
+                            else if (resizeShapes.Contains((Shape)res.VisualHit))
+                                return;
                             oldPoint = e.GetPosition(Canvas);
-                            selectedControlShape = (Shape)res.VisualHit;
                             return;
                         }
 
@@ -132,13 +153,11 @@ namespace WpfPaintProj.ExtraControls
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
             isDragging = false;
-            selectedControlShape = null;
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             isDragging = false;
-            selectedControlShape = null;
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
@@ -149,7 +168,11 @@ namespace WpfPaintProj.ExtraControls
             Point pos = e.GetPosition(Canvas);
 
             selectedShape.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
-            selectedControlShape.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+
+            foreach (Shape shapes in controlShapes)
+            {
+                shapes.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+            }
 
             oldPoint = pos;
         }   

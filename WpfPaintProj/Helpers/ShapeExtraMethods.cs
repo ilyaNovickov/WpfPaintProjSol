@@ -24,6 +24,12 @@ namespace WpfPaintProj.Helpers
             Canvas.SetTop(shape, y);
         }
 
+        public static void SetCanvasPoint(this Shape shape, Point point)
+        {
+            Canvas.SetLeft(shape, point.X);
+            Canvas.SetTop(shape, point.Y);
+        }
+
         public static Point GetCanvasPoint(this Shape shape)
         {
             return new Point(Canvas.GetLeft(shape), Canvas.GetTop(shape));
@@ -39,6 +45,12 @@ namespace WpfPaintProj.Helpers
         {
             return GetRectangleControlPoints(new Rect(rect.GetCanvasPoint().X,
                 rect.GetCanvasPoint().Y, rect.Width, rect.Height));
+        }
+
+        public static IEnumerable<Shape> GetShapeControlPoints(this Shape shape)
+        {
+            return GetRectangleControlPoints(new Rect(shape.GetCanvasPoint().X,
+                shape.GetCanvasPoint().Y, shape.Width, shape.Height));
         }
 
         private static IEnumerable<Shape> GetRectangleControlPoints(Rect rectangle)
