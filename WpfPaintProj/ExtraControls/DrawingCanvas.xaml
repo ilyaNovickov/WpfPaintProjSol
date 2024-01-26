@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WpfPaintProj.ExtraControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Canvas x:Name="Canvas" MouseDown="Canvas_MouseDown">
+    <Canvas x:Name="Canvas" MouseDown="Canvas_MouseDown" MouseLeave="Canvas_MouseLeave" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp">
             
     </Canvas>
 </UserControl>
