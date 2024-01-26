@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfPaintProj.Helpers;
 
 namespace WpfPaintProj.ExtraControls
 {
@@ -147,11 +148,8 @@ namespace WpfPaintProj.ExtraControls
 
             Point pos = e.GetPosition(Canvas);
 
-            Canvas.SetLeft(selectedShape, Canvas.GetLeft(selectedShape) + (pos.X - oldPoint.X));
-            Canvas.SetTop(selectedShape, Canvas.GetTop(selectedShape) + (pos.Y - oldPoint.Y));
-
-            Canvas.SetLeft(selectedControlShape, Canvas.GetLeft(selectedControlShape) + (pos.X - oldPoint.X));
-            Canvas.SetTop(selectedControlShape, Canvas.GetTop(selectedControlShape) + (pos.Y - oldPoint.Y));
+            selectedShape.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+            selectedControlShape.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
 
             oldPoint = pos;
         }   
