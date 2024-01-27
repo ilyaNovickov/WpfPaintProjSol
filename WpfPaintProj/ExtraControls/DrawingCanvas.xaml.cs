@@ -144,10 +144,12 @@ namespace WpfPaintProj.ExtraControls
                         }
 
                         this.SelectedShape = clickedShape;
-                        break;
+                        return;
                     }
                 }
             }
+
+            SelectedShape = null;
         }
 
         private void OnResizePointClicked(Shape shape)
@@ -220,15 +222,7 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            void OffsetShapes(double dx, double dy)
-            {
-                selectedShape.Offset(dx, dy);
-
-                foreach (Shape shapes in controlShapes)
-                {
-                    shapes.Offset(dx, dy);
-                }
-            }
+            
 
             void foo()
             {
@@ -249,7 +243,7 @@ namespace WpfPaintProj.ExtraControls
             {
                 Point pos = e.GetPosition(Canvas);
 
-                OffsetShapes(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+                MoveSelectedShape(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
 
                 oldPoint = pos;
             }  
@@ -259,6 +253,7 @@ namespace WpfPaintProj.ExtraControls
 
                 double dx = pos.X - oldPoint.X;
                 double dy = pos.Y - oldPoint.Y;
+
                 try
                 {
                     switch (this.resizeDirection)
@@ -292,5 +287,43 @@ namespace WpfPaintProj.ExtraControls
                 oldPoint = pos;
             }
         }
+
+        private void MoveSelectedShape(double dx, double dy)
+        {
+            selectedShape.Offset(dx, dy);
+
+            foreach (Shape shapes in controlShapes)
+            {
+                shapes.Offset(dx, dy);
+            }
+        }
+
+        //private void Canvas_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (selectedShape == null)
+        //        return;
+
+        //    double dx = 0;
+        //    double dy = 0;
+
+        //    if (e.Key == Key.Up)
+        //    {
+        //        dy += 1d;
+        //    }
+        //    if (e.Key == Key.Down)
+        //    {
+        //        dy -= 1d;
+        //    }
+        //    if (e.Key == Key.Left)
+        //    {
+        //        dx += 1d;
+        //    }
+        //    if (e.Key == Key.Right)
+        //    {
+        //        dx -= 1d;
+        //    }
+
+        //    MoveSelectedShape(dx, dy);
+        //}
     }
 }
