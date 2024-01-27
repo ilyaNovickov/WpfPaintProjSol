@@ -55,6 +55,7 @@ namespace WpfPaintProj.ExtraControls
                     this.Canvas.Children.Remove(shape);
                 }
                 controlShapes.Clear();
+                resizeShapes.Clear();
 
                 if (selectedShape != null)
                 {
