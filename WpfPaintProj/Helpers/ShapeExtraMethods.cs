@@ -19,6 +19,12 @@ namespace WpfPaintProj.Helpers
             Canvas.SetTop(shape, Canvas.GetTop(shape) + dy);
         }
 
+        public static void Offset(this Shape shape, Vector vector)
+        {
+            Canvas.SetLeft(shape, Canvas.GetLeft(shape) + vector.X);
+            Canvas.SetTop(shape, Canvas.GetTop(shape) + vector.Y);
+        }
+
         public static void SetCanvasPoint(this Shape shape, double x, double y)
         {
             Canvas.SetLeft(shape, x);
@@ -35,6 +41,12 @@ namespace WpfPaintProj.Helpers
         {
             Canvas.SetLeft(shape, point.X);
             Canvas.SetTop(shape, point.Y);
+        }
+
+        public static void SetCanvasCenterPoint(this Shape shape, Point point)
+        {
+            Canvas.SetLeft(shape, point.X - shape.Width / 2d);
+            Canvas.SetTop(shape, point.Y - shape.Height / 2d);
         }
 
         public static Point GetCanvasPoint(this Shape shape)

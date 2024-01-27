@@ -28,13 +28,15 @@ namespace WpfPaintProj.ExtraControls
         private List<Shape> resizeShapes = new List<Shape>(1);
         private Shape decoRect = null;
 
+        private List<Shape> controlShapes = new List<Shape>(1);
+
         private bool isDragging = false;
         private bool isResize = false;
         private ResizeDirection resizeDirection = ResizeDirection.None;
 
         private Point oldPoint = new Point(0, 0);
 
-        private List<Shape> controlShapes = new List<Shape>(1);
+        
 
         public DrawingCanvas()
         {
@@ -197,15 +199,17 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (sender is Canvas)
+            if (isDragging)
             {
-                
-            }    
-            else if (sender is Shape)
-            {
-
-                
+                double s = Canvas.GetRight(selectedShape);
+                double d = Canvas.GetBottom(selectedShape);
+                if (Canvas.GetRight(selectedShape) is double.NaN && Canvas.GetBottom(selectedShape) is double.NaN)
+                {
+                    this.Canvas.Children.Remove(selectedShape);
+                    SelectedShape = null;
+                }
             }
+
             isResize = false;
             isDragging = false;
             this.Cursor = Cursors.Arrow;
@@ -215,6 +219,15 @@ namespace WpfPaintProj.ExtraControls
         {
             Canvas.ReleaseMouseCapture(); 
 
+            if (isDragging)
+            {
+                if (Canvas.GetRight(selectedShape) < 0 && Canvas.GetBottom(selectedShape) < 0)
+                {
+                    this.Canvas.Children.Remove(selectedShape);
+                    SelectedShape = null;
+                }
+            }
+
             isResize = false;
             isDragging = false;
             this.Cursor = Cursors.Arrow;
@@ -222,23 +235,6 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            
-
-            void foo()
-            {
-                int index = 0;
-                foreach (KeyValuePair<string, Point> pair in selectedShape.GetPointsofBorderControlPoints())
-                {
-                    resizeShapes[index].SetCanvasCenterPoint(pair.Value.X, pair.Value.Y);
-                    index++;
-                }
-                Canvas.SetLeft(moveShape, Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d - 5);
-                Canvas.SetTop(moveShape, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - 5);
-                decoRect.SetCanvasPoint(selectedShape.GetCanvasPoint().X, selectedShape.GetCanvasPoint().Y);
-                decoRect.Width = selectedShape.Width;
-                decoRect.Height = selectedShape.Height;
-            }
-
             if (isDragging)
             {
                 Point pos = e.GetPosition(Canvas);
@@ -251,66 +247,78 @@ namespace WpfPaintProj.ExtraControls
             {
                 Point pos = e.GetPosition(Canvas);
 
-                double dx = pos.X - oldPoint.X;
-                double dy = pos.Y - oldPoint.Y;
-
-                try
-                {
-                    switch (this.resizeDirection)
-                    {
-                        case ResizeDirection.Top:
-                            selectedShape.Height -= dy;
-                            selectedShape.Offset(0, dy);
-                            foo();
-                            break;
-                        case ResizeDirection.Bottom:
-                            selectedShape.Height += dy;
-                            selectedShape.Offset(0, 0);
-                            foo();
-                            break;
-                        case ResizeDirection.Left:
-                            selectedShape.Width -= dx;
-                            selectedShape.Offset(dx, 0);
-                            foo();
-                            break;
-                        case ResizeDirection.Right:
-                            selectedShape.Width += dx;
-                            selectedShape.Offset(0, 0);
-                            foo();
-                            break;
-                        case ResizeDirection.TopRight:
-                            selectedShape.Width += dx;
-                            selectedShape.Height -= dy;
-                            selectedShape.Offset(0, dy);
-                            foo();
-                            break;
-                        case ResizeDirection.BottomRight:
-                            selectedShape.Width += dx;
-                            selectedShape.Height += dy;
-                            selectedShape.Offset(0, 0);
-                            foo();
-                            break;
-                        case ResizeDirection.TopLeft:
-                            selectedShape.Width -= dx;
-                            selectedShape.Height -= dy;
-                            selectedShape.Offset(dx, dy);
-                            foo();
-                            break;
-                        case ResizeDirection.BottomLeft:
-                            selectedShape.Width -= dx;
-                            selectedShape.Height += dy;
-                            selectedShape.Offset(dx, 0);
-                            foo();
-                            break;
-                        case ResizeDirection.None:
-                        default:
-                            break;
-                    }
-                }
-                catch { }
+                ResizeSelectedShape(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
 
                 oldPoint = pos;
             }
+        }
+
+        private void OffsetPointsOnResizing()
+        {
+            int index = 0;
+            foreach (KeyValuePair<string, Point> pair in selectedShape.GetPointsofBorderControlPoints())
+            {
+                resizeShapes[index].SetCanvasCenterPoint(pair.Value.X, pair.Value.Y);
+                index++;
+            }
+            moveShape.SetCanvasCenterPoint(Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d,
+                Canvas.GetTop(selectedShape) + selectedShape.Height / 2d);
+            //Canvas.SetLeft(moveShape, Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d - 5);
+            //Canvas.SetTop(moveShape, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - 5);
+            decoRect.SetCanvasPoint(selectedShape.GetCanvasPoint().X, selectedShape.GetCanvasPoint().Y);
+            decoRect.Width = selectedShape.Width;
+            decoRect.Height = selectedShape.Height;
+        }
+
+        private void ResizeSelectedShape(double dx, double dy)
+        {
+            try
+            {
+                switch (this.resizeDirection)
+                {
+                    case ResizeDirection.Top:
+                        selectedShape.Height -= dy;
+                        selectedShape.Offset(0, dy);
+                        break;
+                    case ResizeDirection.Bottom:
+                        selectedShape.Height += dy;
+                        selectedShape.Offset(0, 0);
+                        break;
+                    case ResizeDirection.Left:
+                        selectedShape.Width -= dx;
+                        selectedShape.Offset(dx, 0);
+                        break;
+                    case ResizeDirection.Right:
+                        selectedShape.Width += dx;
+                        selectedShape.Offset(0, 0);
+                        break;
+                    case ResizeDirection.TopRight:
+                        selectedShape.Width += dx;
+                        selectedShape.Height -= dy;
+                        selectedShape.Offset(0, dy);
+                        break;
+                    case ResizeDirection.BottomRight:
+                        selectedShape.Width += dx;
+                        selectedShape.Height += dy;
+                        selectedShape.Offset(0, 0);
+                        break;
+                    case ResizeDirection.TopLeft:
+                        selectedShape.Width -= dx;
+                        selectedShape.Height -= dy;
+                        selectedShape.Offset(dx, dy);
+                        break;
+                    case ResizeDirection.BottomLeft:
+                        selectedShape.Width -= dx;
+                        selectedShape.Height += dy;
+                        selectedShape.Offset(dx, 0);
+                        break;
+                    case ResizeDirection.None:
+                    default:
+                        break;
+                }
+                OffsetPointsOnResizing();
+            }
+            catch { }
         }
 
         private void MoveSelectedShape(double dx, double dy)
