@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -47,28 +48,45 @@ namespace WpfPaintProj.Helpers
                 rect.GetCanvasPoint().Y, rect.Width, rect.Height));
         }
 
-        public static IEnumerable<Shape> GetShapeControlPoints(this Shape shape)
+        public static IEnumerable<Shape> GetShapeControlPoints(this Ellipse shape)
         {
             return GetRectangleControlPoints(new Rect(shape.GetCanvasPoint().X,
                 shape.GetCanvasPoint().Y, shape.Width, shape.Height));
         }
 
+        public static Dictionary<string, Point> GetPointsofBorderControlPoints(Rectangle rectangle)
+        {
+            return GetPointsofBorderControlPoints(new Rect(rectangle.GetCanvasPoint().X,
+                rectangle.GetCanvasPoint().Y, rectangle.Width, rectangle.Height));
+        }
+
+        public static Dictionary<string, Point> GetPointsofBorderControlPoints(Ellipse ellipse)
+        {
+            return GetPointsofBorderControlPoints(new Rect(ellipse.GetCanvasPoint().X,
+                ellipse.GetCanvasPoint().Y, ellipse.Width, ellipse.Height));
+        }
+
+        private static Dictionary<string, Point> GetPointsofBorderControlPoints(Rect rect)
+        {
+            return new Dictionary<string, Point>
+            {
+                { "TOPLEFT", new Point(rect.X, rect.Y) },
+
+                { "TOP", new Point(rect.X + rect.Width / 2d, rect.Y) },
+                { "TOPRIGHT", new Point(rect.X + rect.Width, rect.Y) },
+
+                { "LEFT", new Point(rect.X, rect.Y + rect.Height / 2d) },
+                { "BOTTOMLEFT", new Point(rect.X, rect.Y + rect.Height) },
+
+                { "BOTTOM", new Point(rect.X +    rect.Width / 2d, rect.Y + rect.Height) },
+                { "BOTTOMRIGHT", new Point(rect.X + rect.Width, rect.Y + rect   .Height) },
+                { "RIGHT", new Point(rect.X + rect.Width, rect.Y + rect.Height / 2d) },
+            };
+        }
+
         private static IEnumerable<Shape> GetRectangleControlPoints(Rect rectangle)
         {
-            Dictionary<string, Point> points = new Dictionary<string, Point>
-            {
-                { "TOPLEFT", new Point(rectangle.X, rectangle.Y) },
-
-                { "TOP", new Point(rectangle.X + rectangle.Width / 2d, rectangle.Y) },
-                { "TOPRIGHT", new Point(rectangle.X + rectangle.Width, rectangle.Y) },
-
-                { "LEFT", new Point(rectangle.X, rectangle.Y + rectangle.Height / 2d) },
-                { "BOTTOMLEFT", new Point(rectangle.X, rectangle.Y + rectangle.Height) },
-
-                { "BOTTOM", new Point(rectangle.X + rectangle.Width / 2d, rectangle.Y + rectangle.Height) },
-                { "BOTTOMRIGHT", new Point(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height) },
-                { "RIGHT", new Point(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2d) },
-            };
+            Dictionary<string, Point> points = GetPointsofBorderControlPoints(rectangle);
 
             List<Shape> shapes = new List<Shape>(1);
 
