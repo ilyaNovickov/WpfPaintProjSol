@@ -215,6 +215,18 @@ namespace WpfPaintProj.ExtraControls
                 }
             }
 
+            void foo()
+            {
+                int index = 0;
+                foreach (KeyValuePair<string, Point> pair in selectedShape.GetPointsofBorderControlPoints())
+                {
+                    resizeShapes[index].SetCanvasCenterPoint(pair.Value.X, pair.Value.Y);
+                    index++;
+                }
+                Canvas.SetLeft(moveShape, Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d - 5);
+                Canvas.SetTop(moveShape, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - 5);
+            }
+
             if (isDragging)
             {
                 Point pos = e.GetPosition(Canvas);
@@ -234,7 +246,8 @@ namespace WpfPaintProj.ExtraControls
                 {
                     case ResizeDirection.Top:
                         selectedShape.Height -= dy;
-                        OffsetShapes(0d, dy);
+                        selectedShape.Offset(0, dy);
+                        foo();
                         break;
                     case ResizeDirection.Bottom:
                         break;
