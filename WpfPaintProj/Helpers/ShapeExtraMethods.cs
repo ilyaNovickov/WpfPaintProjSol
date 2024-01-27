@@ -48,19 +48,19 @@ namespace WpfPaintProj.Helpers
                 rect.GetCanvasPoint().Y, rect.Width, rect.Height));
         }
 
-        public static IEnumerable<Shape> GetShapeControlPoints(this Ellipse shape)
+        public static IEnumerable<Shape> GetShapeControlPoints(this Shape shape)
         {
             return GetRectangleControlPoints(new Rect(shape.GetCanvasPoint().X,
                 shape.GetCanvasPoint().Y, shape.Width, shape.Height));
         }
 
-        public static Dictionary<string, Point> GetPointsofBorderControlPoints(Rectangle rectangle)
+        public static Dictionary<string, Point> GetPointsofBorderControlPoints(this Rectangle rectangle)
         {
             return GetPointsofBorderControlPoints(new Rect(rectangle.GetCanvasPoint().X,
                 rectangle.GetCanvasPoint().Y, rectangle.Width, rectangle.Height));
         }
 
-        public static Dictionary<string, Point> GetPointsofBorderControlPoints(Ellipse ellipse)
+        public static Dictionary<string, Point> GetPointsofBorderControlPoints(this Shape ellipse)
         {
             return GetPointsofBorderControlPoints(new Rect(ellipse.GetCanvasPoint().X,
                 ellipse.GetCanvasPoint().Y, ellipse.Width, ellipse.Height));
