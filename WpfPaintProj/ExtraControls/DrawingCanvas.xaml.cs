@@ -29,6 +29,7 @@ namespace WpfPaintProj.ExtraControls
         private Shape decoRect = null;
 
         private bool isDragging = false;
+        private bool isResize = false;
 
         private Point oldPoint = new Point(0, 0);
 
@@ -129,7 +130,10 @@ namespace WpfPaintProj.ExtraControls
                                 isDragging = true;
                             }
                             else if (resizeShapes.Contains(clickedShape))
-                                return;
+                            {
+                                isResize = true;
+                                OnResizePointClicked(clickedShape);
+                            }
                             oldPoint = e.GetPosition(Canvas);
                             return;
                         }
@@ -141,15 +145,51 @@ namespace WpfPaintProj.ExtraControls
             }
         }
 
+        private void OnResizePointClicked(Shape shape)
+        {
+            switch (shape.Name)
+            {
+                case "TOP":
+                    this.Cursor = Cursors.ScrollN;
+                    break;
+                case "BOTTOM":
+                    this.Cursor = Cursors.ScrollS;
+                    break;
+                case "LEFT":
+                    this.Cursor = Cursors.ScrollW;
+                    break;
+                case "RIGHT":
+                    this.Cursor = Cursors.ScrollE;
+                    break;
+                case "TOPLEFT":
+                    this.Cursor = Cursors.ScrollNW;
+                    break;
+                case "TOPRIGHT":
+                    this.Cursor = Cursors.ScrollNE;
+                    break;
+                case "BOTTOMLEFT":
+                    this.Cursor = Cursors.ScrollSW;
+                    break;
+                case "BOTTOMRIGHT":
+                    this.Cursor = Cursors.ScrollSE;
+                    break;
+                default:
+                    throw new Exception("Неизвесная точка");
+
+            }
+        }
+
 
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
+            isResize = false;
             isDragging = false;
             this.Cursor = Cursors.Arrow;
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            isResize = false;
             isDragging = false;
             this.Cursor = Cursors.Arrow;
         }
@@ -169,6 +209,10 @@ namespace WpfPaintProj.ExtraControls
 
                 oldPoint = pos;
             }  
+            else if (isResize)
+            {
+
+            }
         }   
     }
 }
