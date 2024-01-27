@@ -141,7 +141,7 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
-                isDragging = false;
+            isDragging = false;
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
