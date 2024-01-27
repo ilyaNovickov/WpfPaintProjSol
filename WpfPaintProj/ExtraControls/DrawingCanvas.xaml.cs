@@ -124,7 +124,10 @@ namespace WpfPaintProj.ExtraControls
                         if (controlShapes.Contains(clickedShape))
                         {
                             if (clickedShape == moveShape)
+                            {
+                                this.Cursor = Cursors.SizeAll;
                                 isDragging = true;
+                            }
                             else if (resizeShapes.Contains(clickedShape))
                                 return;
                             oldPoint = e.GetPosition(Canvas);
@@ -142,11 +145,13 @@ namespace WpfPaintProj.ExtraControls
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
             isDragging = false;
+            this.Cursor = Cursors.Arrow;
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             isDragging = false;
+            this.Cursor = Cursors.Arrow;
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
