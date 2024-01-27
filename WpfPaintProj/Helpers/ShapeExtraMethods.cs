@@ -55,24 +55,24 @@ namespace WpfPaintProj.Helpers
 
         private static IEnumerable<Shape> GetRectangleControlPoints(Rect rectangle)
         {
-            List<Point> points = new List<Point>()
+            Dictionary<string, Point> points = new Dictionary<string, Point>
             {
-                new Point(rectangle.X, rectangle.Y),
+                { "TOPLEFT", new Point(rectangle.X, rectangle.Y) },
 
-                new Point(rectangle.X + rectangle.Width / 2d, rectangle.Y),
-                new Point(rectangle.X + rectangle.Width, rectangle.Y),
+                { "TOP", new Point(rectangle.X + rectangle.Width / 2d, rectangle.Y) },
+                { "TOPRIGHT", new Point(rectangle.X + rectangle.Width, rectangle.Y) },
 
-                new Point(rectangle.X, rectangle.Y + rectangle.Height / 2d),
-                new Point(rectangle.X, rectangle.Y + rectangle.Height),
+                { "LEFT", new Point(rectangle.X, rectangle.Y + rectangle.Height / 2d) },
+                { "BOTTOMLEFT", new Point(rectangle.X, rectangle.Y + rectangle.Height) },
 
-                new Point(rectangle.X + rectangle.Width / 2d, rectangle.Y + rectangle.Height),
-                new Point(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height),
-                new Point(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2d),
+                { "BOTTOM", new Point(rectangle.X + rectangle.Width / 2d, rectangle.Y + rectangle.Height) },
+                { "BOTTOMRIGHT", new Point(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height) },
+                { "RIGHT", new Point(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height / 2d) },
             };
 
             List<Shape> shapes = new List<Shape>(1);
 
-            foreach (Point point in points)
+            foreach (KeyValuePair<string, Point> pair in points)
             {
                 Rectangle rect = new Rectangle()
                 {
@@ -80,10 +80,9 @@ namespace WpfPaintProj.Helpers
                     Height = 10,
                     Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0)),
                     Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0))
-
                 };
-
-                rect.SetCanvasPoint(point.X - 5, point.Y - 5);
+                rect.Name = pair.Key;
+                rect.SetCanvasPoint(pair.Value.X - 5, pair.Value.Y - 5);
 
                 shapes.Add(rect);
             }
