@@ -71,6 +71,7 @@ namespace WpfPaintProj.ExtraControls
                 Width = shape.Width,
                 Height = shape.Height,
                 Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
+                Fill = Brushes.Transparent,
                 StrokeDashArray = new DoubleCollection() { 4, 4 }
             };
             rect.SetCanvasPoint(shape.GetCanvasPoint());
@@ -116,6 +117,8 @@ namespace WpfPaintProj.ExtraControls
         {
             if (!CanSelectShapes)
                 return;
+
+            Canvas.CaptureMouse();
 
             foreach (UIElement element in this.Canvas.Children)
             {
@@ -192,6 +195,15 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
+            if (sender is Canvas)
+            {
+                
+            }    
+            else if (sender is Shape)
+            {
+
+                
+            }
             isResize = false;
             isDragging = false;
             this.Cursor = Cursors.Arrow;
@@ -199,6 +211,8 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            Canvas.ReleaseMouseCapture(); 
+
             isResize = false;
             isDragging = false;
             this.Cursor = Cursors.Arrow;
@@ -226,6 +240,9 @@ namespace WpfPaintProj.ExtraControls
                 }
                 Canvas.SetLeft(moveShape, Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d - 5);
                 Canvas.SetTop(moveShape, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - 5);
+                decoRect.SetCanvasPoint(selectedShape.GetCanvasPoint().X, selectedShape.GetCanvasPoint().Y);
+                decoRect.Width = selectedShape.Width;
+                decoRect.Height = selectedShape.Height;
             }
 
             if (isDragging)
@@ -242,35 +259,38 @@ namespace WpfPaintProj.ExtraControls
 
                 double dx = pos.X - oldPoint.X;
                 double dy = pos.Y - oldPoint.Y;
-
-                switch (this.resizeDirection)
+                try
                 {
-                    case ResizeDirection.Top:
-                        selectedShape.Height -= dy;
-                        selectedShape.Offset(0, dy);
-                        foo();
-                        break;
-                    case ResizeDirection.Bottom:
-                        break;
-                    case ResizeDirection.Left:
-                        break;
-                    case ResizeDirection.Right:
-                        break;
-                    case ResizeDirection.TopRight:
-                        break;
-                    case ResizeDirection.BottomRight:
-                        break;
-                    case ResizeDirection.TopLeft:
-                        break;
-                    case ResizeDirection.BottomLeft:
-                        break;
-                    case ResizeDirection.None:
-                    default:
-                        break;
+                    switch (this.resizeDirection)
+                    {
+                        case ResizeDirection.Top:
+                            selectedShape.Height -= dy;
+                            selectedShape.Offset(0, dy);
+                            foo();
+                            break;
+                        case ResizeDirection.Bottom:
+                            break;
+                        case ResizeDirection.Left:
+                            break;
+                        case ResizeDirection.Right:
+                            break;
+                        case ResizeDirection.TopRight:
+                            break;
+                        case ResizeDirection.BottomRight:
+                            break;
+                        case ResizeDirection.TopLeft:
+                            break;
+                        case ResizeDirection.BottomLeft:
+                            break;
+                        case ResizeDirection.None:
+                        default:
+                            break;
+                    }
                 }
+                catch { }
 
                 oldPoint = pos;
             }
-        }   
+        }
     }
 }
