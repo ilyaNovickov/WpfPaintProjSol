@@ -10,6 +10,7 @@
             MouseLeave="Canvas_MouseLeave" 
             MouseMove="Canvas_MouseMove" 
             MouseUp="Canvas_MouseUp"
+            
             >
             
     </Canvas>
