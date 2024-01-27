@@ -26,6 +26,7 @@ namespace WpfPaintProj.ExtraControls
 
         private Shape moveShape = null;
         private List<Shape> resizeShapes = new List<Shape>(1);
+        private Shape decoRect = null;
 
         private bool isDragging = false;
 
@@ -55,29 +56,33 @@ namespace WpfPaintProj.ExtraControls
 
                 if (selectedShape != null)
                 {
-                    GetMoveControlPoint(selectedShape);
-
-                    //List<Point> points = GetControlPoints(selectedShape);
-                    Rectangle rect = new Rectangle()
-                    {
-                        Width = selectedShape.Width,
-                        Height = selectedShape.Height,
-                        Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
-                        StrokeDashArray = new DoubleCollection() { 4, 4 }
-                    };
-                    rect.SetCanvasPoint(selectedShape.GetCanvasPoint());
-                    controlShapes.Add(rect);
-                    this.Canvas.Children.Add(rect);
-
-                    foreach (Shape shape in selectedShape.GetShapeControlPoints())
-                    {
-                        this.Canvas.Children.Add(shape);
-                        controlShapes.Add(shape);
-                        resizeShapes.Add(shape);
-                    }
-
+                    GetControlPoints(selectedShape);
                 }
             }
+        }
+
+        private void GetControlPoints(Shape shape)
+        {
+            Rectangle rect = new Rectangle()
+            {
+                Width = shape.Width,
+                Height = shape.Height,
+                Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
+                StrokeDashArray = new DoubleCollection() { 4, 4 }
+            };
+            rect.SetCanvasPoint(shape.GetCanvasPoint());
+            controlShapes.Add(rect);
+            this.Canvas.Children.Add(rect);
+            decoRect = rect;
+
+            foreach (Shape shape1 in shape.GetShapeControlPoints())
+            {
+                this.Canvas.Children.Add(shape1);
+                controlShapes.Add(shape1);
+                resizeShapes.Add(shape1);
+            }
+
+            GetMoveControlPoint(shape);
         }
 
         private void GetMoveControlPoint(Shape shape)
@@ -109,50 +114,34 @@ namespace WpfPaintProj.ExtraControls
             if (!CanSelectShapes)
                 return;
 
-
-            
-
             foreach (UIElement element in this.Canvas.Children)
             {
                 if (element is Shape shape)
                 {
                     HitTestResult res = VisualTreeHelper.HitTest(this.Canvas, e.GetPosition(this.Canvas));
-                    if (res != null)
+                    if (res != null && res.VisualHit is Shape clickedShape)
                     {
-                        if (controlShapes.Contains((Shape)res.VisualHit))
+                        if (controlShapes.Contains(clickedShape))
                         {
-                            if (((Shape)res.VisualHit) == moveShape)
+                            if (clickedShape == moveShape)
                                 isDragging = true;
-                            else if (resizeShapes.Contains((Shape)res.VisualHit))
+                            else if (resizeShapes.Contains(clickedShape))
                                 return;
                             oldPoint = e.GetPosition(Canvas);
                             return;
                         }
 
-                        this.SelectedShape = (Shape)res.VisualHit;
+                        this.SelectedShape = clickedShape;
                         break;
                     }
                 }
             }
         }
 
-        private List<Point> GetControlPoints(Shape shape)
-        {
-            List<Point> points = new List<Point>(1);
-
-            Point point = new Point();
-
-            point.X = Canvas.GetLeft(shape);
-            point.X = Canvas.GetTop(shape);
-
-            points.Add(point);
-
-            return points;
-        }
 
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
-            isDragging = false;
+                isDragging = false;
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
@@ -162,19 +151,19 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!isDragging)
-                return;
-
-            Point pos = e.GetPosition(Canvas);
-
-            selectedShape.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
-
-            foreach (Shape shapes in controlShapes)
+            if (isDragging)
             {
-                shapes.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
-            }
+                Point pos = e.GetPosition(Canvas);
 
-            oldPoint = pos;
+                selectedShape.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+
+                foreach (Shape shapes in controlShapes)
+                {
+                    shapes.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+                }
+
+                oldPoint = pos;
+            }  
         }   
     }
 }
