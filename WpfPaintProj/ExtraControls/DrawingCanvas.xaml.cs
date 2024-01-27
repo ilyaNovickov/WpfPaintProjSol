@@ -30,6 +30,7 @@ namespace WpfPaintProj.ExtraControls
 
         private bool isDragging = false;
         private bool isResize = false;
+        private ResizeDirection resizeDirection = ResizeDirection.None;
 
         private Point oldPoint = new Point(0, 0);
 
@@ -151,27 +152,35 @@ namespace WpfPaintProj.ExtraControls
             {
                 case "TOP":
                     this.Cursor = Cursors.ScrollN;
+                    resizeDirection = ResizeDirection.Top;
                     break;
                 case "BOTTOM":
                     this.Cursor = Cursors.ScrollS;
+                    resizeDirection = ResizeDirection.Bottom;
                     break;
                 case "LEFT":
                     this.Cursor = Cursors.ScrollW;
+                    resizeDirection = ResizeDirection.Left;
                     break;
                 case "RIGHT":
                     this.Cursor = Cursors.ScrollE;
+                    resizeDirection = ResizeDirection.Right;
                     break;
                 case "TOPLEFT":
                     this.Cursor = Cursors.ScrollNW;
+                    resizeDirection = ResizeDirection.TopLeft;
                     break;
                 case "TOPRIGHT":
                     this.Cursor = Cursors.ScrollNE;
+                    resizeDirection = ResizeDirection.TopRight;
                     break;
                 case "BOTTOMLEFT":
                     this.Cursor = Cursors.ScrollSW;
+                    resizeDirection = ResizeDirection.BottomLeft;
                     break;
                 case "BOTTOMRIGHT":
                     this.Cursor = Cursors.ScrollSE;
+                    resizeDirection = ResizeDirection.BottomRight;
                     break;
                 default:
                     throw new Exception("Неизвесная точка");
@@ -196,22 +205,57 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            void OffsetShapes(double dx, double dy)
+            {
+                selectedShape.Offset(dx, dy);
+
+                foreach (Shape shapes in controlShapes)
+                {
+                    shapes.Offset(dx, dy);
+                }
+            }
+
             if (isDragging)
             {
                 Point pos = e.GetPosition(Canvas);
 
-                selectedShape.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
-
-                foreach (Shape shapes in controlShapes)
-                {
-                    shapes.Offset(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
-                }
+                OffsetShapes(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
 
                 oldPoint = pos;
             }  
             else if (isResize)
             {
+                Point pos = e.GetPosition(Canvas);
 
+                double dx = pos.X - oldPoint.X;
+                double dy = pos.Y - oldPoint.Y;
+
+                switch (this.resizeDirection)
+                {
+                    case ResizeDirection.Top:
+                        selectedShape.Height -= dy;
+                        OffsetShapes(0d, dy);
+                        break;
+                    case ResizeDirection.Bottom:
+                        break;
+                    case ResizeDirection.Left:
+                        break;
+                    case ResizeDirection.Right:
+                        break;
+                    case ResizeDirection.TopRight:
+                        break;
+                    case ResizeDirection.BottomRight:
+                        break;
+                    case ResizeDirection.TopLeft:
+                        break;
+                    case ResizeDirection.BottomLeft:
+                        break;
+                    case ResizeDirection.None:
+                    default:
+                        break;
+                }
+
+                oldPoint = pos;
             }
         }   
     }

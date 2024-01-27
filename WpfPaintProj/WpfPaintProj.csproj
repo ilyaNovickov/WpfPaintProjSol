@@ -82,7 +82,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\ReseizeDirection.cs" />
+    <Compile Include="Helpers\ResizeDirection.cs" />
     <Compile Include="Helpers\ShapeExtraMethods.cs" />
     <Compile Include="OwnShapes\EllipseV.cs" />
     <Compile Include="OwnShapes\IControlPoints.cs" />
