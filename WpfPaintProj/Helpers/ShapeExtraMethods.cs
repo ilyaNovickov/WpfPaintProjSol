@@ -25,6 +25,12 @@ namespace WpfPaintProj.Helpers
             Canvas.SetTop(shape, y);
         }
 
+        public static void SetCanvasCenterPoint(this Shape shape, double x, double y)
+        {
+            Canvas.SetLeft(shape, x - shape.Width / 2d);
+            Canvas.SetTop(shape, y - shape.Height / 2d);
+        }
+
         public static void SetCanvasPoint(this Shape shape, Point point)
         {
             Canvas.SetLeft(shape, point.X);
