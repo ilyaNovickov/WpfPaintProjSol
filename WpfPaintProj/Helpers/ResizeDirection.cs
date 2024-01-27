@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WpfPaintProj.Helpers
 {
-    internal enum ReseizeDirection
+    public enum ResizeDirection
     {
-        Top, Bottom, Left, Right, TopRight, BottomRight, TopLeft, BottomLeft
+        Top, Bottom, Left, Right, TopRight, BottomRight, TopLeft, BottomLeft, None
     }
 }
