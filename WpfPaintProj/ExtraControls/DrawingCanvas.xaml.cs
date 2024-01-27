@@ -22,21 +22,28 @@ namespace WpfPaintProj.ExtraControls
     /// </summary>
     public partial class DrawingCanvas : UserControl
     {
+        //Выбранная фигура
         private Shape selectedShape = null;
 
+        //Фигура для перемещения
         private Shape moveShape = null;
+        //Фигуры для изменения размера
         private List<Shape> resizeShapes = new List<Shape>(1);
+        //Декоративная фигура
         private Shape decoRect = null;
 
+        //Список всех вспомогательных точек
         private List<Shape> controlShapes = new List<Shape>(1);
 
+        //Перемещение фигуры
         private bool isDragging = false;
+        //Изменение размера фигуры
         private bool isResize = false;
+        //Направление изменения фигуры
         private ResizeDirection resizeDirection = ResizeDirection.None;
 
+        //Прошлое положение курсора мыши
         private Point oldPoint = new Point(0, 0);
-
-        
 
         public DrawingCanvas()
         {
@@ -52,6 +59,7 @@ namespace WpfPaintProj.ExtraControls
             {
                 selectedShape = value;
 
+                //Очистка от вспомогательных фигур
                 foreach (Shape shape in controlShapes)
                 {
                     this.Canvas.Children.Remove(shape);
@@ -66,8 +74,10 @@ namespace WpfPaintProj.ExtraControls
             }
         }
 
+        //Получение вспомогательных точек
         private void GetControlPoints(Shape shape)
         {
+            //Точка для декора
             Rectangle rect = new Rectangle()
             {
                 Width = shape.Width,
@@ -81,6 +91,7 @@ namespace WpfPaintProj.ExtraControls
             this.Canvas.Children.Add(rect);
             decoRect = rect;
 
+            //Точки для изменения размера
             foreach (Shape shape1 in shape.GetShapeControlPoints())
             {
                 this.Canvas.Children.Add(shape1);
@@ -88,9 +99,11 @@ namespace WpfPaintProj.ExtraControls
                 resizeShapes.Add(shape1);
             }
 
+            //Точка для перемещения фигуры
             GetMoveControlPoint(shape);
         }
 
+        //Получение точки полкчения фигуры
         private void GetMoveControlPoint(Shape shape)
         {
             Rectangle rect = new Rectangle();
@@ -131,11 +144,13 @@ namespace WpfPaintProj.ExtraControls
                     {
                         if (controlShapes.Contains(clickedShape))
                         {
+                            //Попало в точку для перемещения
                             if (clickedShape == moveShape)
                             {
                                 this.Cursor = Cursors.SizeAll;
                                 isDragging = true;
                             }
+                            //Попало в точку для изменения размера
                             else if (resizeShapes.Contains(clickedShape))
                             {
                                 isResize = true;
@@ -154,6 +169,7 @@ namespace WpfPaintProj.ExtraControls
             SelectedShape = null;
         }
 
+        //Получение направления изменения размера
         private void OnResizePointClicked(Shape shape)
         {
             switch (shape.Name)
@@ -199,6 +215,7 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
+            //Удаление объекта вне видимости слоя
             if (isDragging)
             {
                 double s = Canvas.GetRight(selectedShape);
@@ -219,15 +236,6 @@ namespace WpfPaintProj.ExtraControls
         {
             Canvas.ReleaseMouseCapture(); 
 
-            if (isDragging)
-            {
-                if (Canvas.GetRight(selectedShape) < 0 && Canvas.GetBottom(selectedShape) < 0)
-                {
-                    this.Canvas.Children.Remove(selectedShape);
-                    SelectedShape = null;
-                }
-            }
-
             isResize = false;
             isDragging = false;
             this.Cursor = Cursors.Arrow;
@@ -235,6 +243,7 @@ namespace WpfPaintProj.ExtraControls
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            //Перемещение фигуры
             if (isDragging)
             {
                 Point pos = e.GetPosition(Canvas);
@@ -243,6 +252,7 @@ namespace WpfPaintProj.ExtraControls
 
                 oldPoint = pos;
             }  
+            //Изменение размера фигуры
             else if (isResize)
             {
                 Point pos = e.GetPosition(Canvas);
@@ -253,6 +263,7 @@ namespace WpfPaintProj.ExtraControls
             }
         }
 
+        //Перемещение контрольных точек при перемещении
         private void OffsetPointsOnResizing()
         {
             int index = 0;
@@ -263,13 +274,12 @@ namespace WpfPaintProj.ExtraControls
             }
             moveShape.SetCanvasCenterPoint(Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d,
                 Canvas.GetTop(selectedShape) + selectedShape.Height / 2d);
-            //Canvas.SetLeft(moveShape, Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d - 5);
-            //Canvas.SetTop(moveShape, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - 5);
             decoRect.SetCanvasPoint(selectedShape.GetCanvasPoint().X, selectedShape.GetCanvasPoint().Y);
             decoRect.Width = selectedShape.Width;
             decoRect.Height = selectedShape.Height;
         }
 
+        //Изменение размера выбранной фигуры
         private void ResizeSelectedShape(double dx, double dy)
         {
             try
@@ -321,6 +331,7 @@ namespace WpfPaintProj.ExtraControls
             catch { }
         }
 
+        //Перемещение выбранной фигуры
         private void MoveSelectedShape(double dx, double dy)
         {
             selectedShape.Offset(dx, dy);
