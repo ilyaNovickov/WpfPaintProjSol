@@ -264,18 +264,43 @@ namespace WpfPaintProj.ExtraControls
                             foo();
                             break;
                         case ResizeDirection.Bottom:
+                            selectedShape.Height += dy;
+                            selectedShape.Offset(0, 0);
+                            foo();
                             break;
                         case ResizeDirection.Left:
+                            selectedShape.Width -= dx;
+                            selectedShape.Offset(dx, 0);
+                            foo();
                             break;
                         case ResizeDirection.Right:
+                            selectedShape.Width += dx;
+                            selectedShape.Offset(0, 0);
+                            foo();
                             break;
                         case ResizeDirection.TopRight:
+                            selectedShape.Width += dx;
+                            selectedShape.Height -= dy;
+                            selectedShape.Offset(0, dy);
+                            foo();
                             break;
                         case ResizeDirection.BottomRight:
+                            selectedShape.Width += dx;
+                            selectedShape.Height += dy;
+                            selectedShape.Offset(0, 0);
+                            foo();
                             break;
                         case ResizeDirection.TopLeft:
+                            selectedShape.Width -= dx;
+                            selectedShape.Height -= dy;
+                            selectedShape.Offset(dx, dy);
+                            foo();
                             break;
                         case ResizeDirection.BottomLeft:
+                            selectedShape.Width -= dx;
+                            selectedShape.Height += dy;
+                            selectedShape.Offset(dx, 0);
+                            foo();
                             break;
                         case ResizeDirection.None:
                         default:
