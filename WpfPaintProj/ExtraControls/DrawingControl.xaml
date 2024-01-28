@@ -8,6 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <ScrollViewer x:Name="scrollViewer" x:FieldModifier="private" HorizontalScrollBarVisibility="Auto" >
         <Canvas x:Name="canvas" x:FieldModifier="private">
+            
         </Canvas>
     </ScrollViewer>
 </UserControl>

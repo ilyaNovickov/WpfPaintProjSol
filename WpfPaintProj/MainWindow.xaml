@@ -44,6 +44,7 @@
                     
                 </ScrollViewer>-->
                 <extra:DrawingControl x:Name="drawingControl" Background="Gray">
+                    
                 </extra:DrawingControl>
             </Border>
             <Border BorderBrush="Gray" BorderThickness="2" Grid.Row="2" Grid.Column="2">
