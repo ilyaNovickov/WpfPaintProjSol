@@ -36,13 +36,15 @@ namespace WpfPaintProj.ExtraControls
         public void AddLayer()
         {
             drawingCanvas.Add(new Layer());
-            this.canvas.Children.Add(drawingCanvas.Last()) ;
+            this.canvas.Children.Add(drawingCanvas.Last());
+            UpdateSize();
         }
 
         public void AddLayer(Layer canvas)
         {
             drawingCanvas.Add(canvas);
             this.canvas.Children.Add(canvas);
+            UpdateSize();
         }
 
         public void RemoveLayer(Layer canvas)
@@ -55,6 +57,19 @@ namespace WpfPaintProj.ExtraControls
         {
             drawingCanvas.RemoveAt(index);
             this.canvas.Children.RemoveAt(index);
+        }
+
+        public void UpdateSize()
+        {
+            Layer layer = drawingCanvas.Last();
+            if (layer.Width > canvas.Width)
+            {
+                canvas.Width = layer.Width;
+            }
+            if (layer.Height > canvas.Height)
+            {
+                canvas.Height = layer.Height;
+            }
         }
         #endregion
     }
