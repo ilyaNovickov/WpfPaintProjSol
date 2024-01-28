@@ -103,8 +103,8 @@ namespace WpfPaintProj
             drawingCanvas = drawingControl.Layers.Last();
             drawingCanvas.Background = Brushes.Red;
             drawingCanvas.MouseDown += canvas_MouseDown;
-            drawingCanvas.Width = 100;
-            drawingCanvas.Height = 100;
+            drawingCanvas.Width = 500;
+            drawingCanvas.Height = 500;
             //DrawingCanvas canvas = new DrawingCanvas();
             //canvas.Width = 1000;
             //canvas.Height = 1000;
