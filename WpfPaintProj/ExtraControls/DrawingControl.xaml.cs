@@ -36,21 +36,25 @@ namespace WpfPaintProj.ExtraControls
         public void AddLayer()
         {
             drawingCanvas.Add(new DrawingCanvas());
+            this.canvas.Children.Add(drawingCanvas.Last()) ;
         }
 
         public void AddLayer(DrawingCanvas canvas)
         {
             drawingCanvas.Add(canvas);
+            this.canvas.Children.Add(canvas);
         }
 
         public void RemoveLayer(DrawingCanvas canvas)
         {
             drawingCanvas.Remove(canvas);
+            this.canvas.Children.Remove(canvas);
         }
 
         public void RemoveLayerAt(int index)
         {
             drawingCanvas.RemoveAt(index);
+            this.canvas.Children.RemoveAt(index);
         }
         #endregion
     }
