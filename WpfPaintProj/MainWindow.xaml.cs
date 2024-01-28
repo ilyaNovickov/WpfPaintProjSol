@@ -112,24 +112,6 @@ namespace WpfPaintProj
             drawingCanvas.MouseDown += canvas_MouseDown;
             drawingCanvas.Width = 500;
             drawingCanvas.Height = 500;
-
-            //DrawingCanvas canvas = new DrawingCanvas();
-            //canvas.Width = 1000;
-            //canvas.Height = 1000;
-            //if (selectedShape != null)
-            //    canvas.CanSelectShapes = true;
-            //canvas.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            //canvas.MouseDown += canvas_MouseDown;
-            //mainScrollViewer.Content = canvas;
-            //this.drawingCanvas = canvas;
-
-            //OwnShapes.MyWeirdShape tr = new OwnShapes.MyWeirdShape();
-
-            //tr.Width = 100;
-            //tr.Height = 100;
-            //tr.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 255));
-
-            //canvas.AddShape(tr);
         }
     }
 }
