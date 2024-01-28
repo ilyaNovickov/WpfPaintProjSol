@@ -60,9 +60,7 @@ namespace WpfPaintProj
                 default:
                     return;
                 case StandartShapes.Ellipse:
-
                     Ellipse ellipse = new Ellipse();
-                   //EllipseV ellipse = new EllipseV();
                     ellipse.Width = widthUpDown.Value.Value;
                     ellipse.Height = heightUpDown.Value.Value;
                     ellipse.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
@@ -70,7 +68,16 @@ namespace WpfPaintProj
                     Canvas.SetLeft(ellipse, e.GetPosition(drawingCanvas).X - ellipse.Width / 2d);
                     Canvas.SetTop(ellipse, e.GetPosition(drawingCanvas).Y - ellipse.Height / 2d);
                     drawingCanvas.AddShape(ellipse);
-                    
+                    break;
+                case StandartShapes.Rectangele:
+                    Rectangle rectangle = new Rectangle();
+                    rectangle.Width = widthUpDown.Value.Value;
+                    rectangle.Height = heightUpDown.Value.Value;
+                    rectangle.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
+                    rectangle.Stroke = new SolidColorBrush(foreColorPicker.SelectedColor.Value);
+                    Canvas.SetLeft(rectangle, e.GetPosition(drawingCanvas).X - rectangle.Width / 2d);
+                    Canvas.SetTop(rectangle, e.GetPosition(drawingCanvas).Y - rectangle.Height / 2d);
+                    drawingCanvas.AddShape(rectangle);
                     break;
             }
 
