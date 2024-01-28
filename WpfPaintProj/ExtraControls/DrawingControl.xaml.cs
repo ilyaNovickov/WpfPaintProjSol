@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,37 @@ namespace WpfPaintProj.ExtraControls
     /// </summary>
     public partial class DrawingControl : UserControl
     {
+        private ObservableCollection<DrawingCanvas> drawingCanvas = new ObservableCollection<DrawingCanvas>();
+
         public DrawingControl()
         {
             InitializeComponent();
         }
+        #region ForCollection
+        public ObservableCollection<DrawingCanvas> Layers
+        {
+            get => drawingCanvas;
+        }
+
+        public void AddLayer()
+        {
+            drawingCanvas.Add(new DrawingCanvas());
+        }
+
+        public void AddLayer(DrawingCanvas canvas)
+        {
+            drawingCanvas.Add(canvas);
+        }
+
+        public void RemoveLayer(DrawingCanvas canvas)
+        {
+            drawingCanvas.Remove(canvas);
+        }
+
+        public void RemoveLayerAt(int index)
+        {
+            drawingCanvas.RemoveAt(index);
+        }
+        #endregion
     }
 }
