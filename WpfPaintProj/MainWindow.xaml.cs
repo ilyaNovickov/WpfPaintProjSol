@@ -23,7 +23,7 @@ namespace WpfPaintProj
     /// </summary>
     public partial class MainWindow : Window
     {
-        private DrawingCanvas drawingCanvas = null;
+        private Layer drawingCanvas = null;
 
         private bool isDraw = false;
         private StandartShapes? selectedShape = null;
@@ -101,10 +101,11 @@ namespace WpfPaintProj
         {
             this.drawingControl.AddLayer();
             drawingCanvas = drawingControl.Layers.Last();
-            drawingCanvas.Background = Brushes.Red;
+            drawingCanvas.Background = Brushes.White;
             drawingCanvas.MouseDown += canvas_MouseDown;
             drawingCanvas.Width = 500;
             drawingCanvas.Height = 500;
+
             //DrawingCanvas canvas = new DrawingCanvas();
             //canvas.Width = 1000;
             //canvas.Height = 1000;
