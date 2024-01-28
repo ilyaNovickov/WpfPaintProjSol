@@ -99,15 +99,15 @@ namespace WpfPaintProj
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            DrawingCanvas canvas = new DrawingCanvas();
-            canvas.Width = 1000;
-            canvas.Height = 1000;
-            if (selectedShape != null)
-                canvas.CanSelectShapes = true;
-            canvas.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            canvas.MouseDown += canvas_MouseDown;
-            mainScrollViewer.Content = canvas;
-            this.drawingCanvas = canvas;
+            //DrawingCanvas canvas = new DrawingCanvas();
+            //canvas.Width = 1000;
+            //canvas.Height = 1000;
+            //if (selectedShape != null)
+            //    canvas.CanSelectShapes = true;
+            //canvas.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            //canvas.MouseDown += canvas_MouseDown;
+            //mainScrollViewer.Content = canvas;
+            //this.drawingCanvas = canvas;
 
             //OwnShapes.MyWeirdShape tr = new OwnShapes.MyWeirdShape();
 
