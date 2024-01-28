@@ -12,7 +12,7 @@ using WpfPaintProj.Helpers;
 
 namespace WpfPaintProj.ExtraControls
 {
-    internal class Layer : Canvas
+    public class Layer : Canvas
     {
         //Выбранная фигура
         private Shape selectedShape = null;

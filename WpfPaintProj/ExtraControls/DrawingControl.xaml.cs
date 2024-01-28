@@ -21,31 +21,31 @@ namespace WpfPaintProj.ExtraControls
     /// </summary>
     public partial class DrawingControl : UserControl
     {
-        private ObservableCollection<DrawingCanvas> drawingCanvas = new ObservableCollection<DrawingCanvas>();
+        private ObservableCollection<Layer> drawingCanvas = new ObservableCollection<Layer>();
 
         public DrawingControl()
         {
             InitializeComponent();
         }
         #region ForCollection
-        public ObservableCollection<DrawingCanvas> Layers
+        public ObservableCollection<Layer> Layers
         {
             get => drawingCanvas;
         }
 
         public void AddLayer()
         {
-            drawingCanvas.Add(new DrawingCanvas());
+            drawingCanvas.Add(new Layer());
             this.canvas.Children.Add(drawingCanvas.Last()) ;
         }
 
-        public void AddLayer(DrawingCanvas canvas)
+        public void AddLayer(Layer canvas)
         {
             drawingCanvas.Add(canvas);
             this.canvas.Children.Add(canvas);
         }
 
-        public void RemoveLayer(DrawingCanvas canvas)
+        public void RemoveLayer(Layer canvas)
         {
             drawingCanvas.Remove(canvas);
             this.canvas.Children.Remove(canvas);
