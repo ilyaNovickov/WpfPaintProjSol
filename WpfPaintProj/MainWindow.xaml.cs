@@ -99,6 +99,12 @@ namespace WpfPaintProj
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
+            this.drawingControl.AddLayer();
+            drawingCanvas = drawingControl.Layers.Last();
+            drawingCanvas.Background = Brushes.Red;
+            drawingCanvas.MouseDown += canvas_MouseDown;
+            drawingCanvas.Width = 100;
+            drawingCanvas.Height = 100;
             //DrawingCanvas canvas = new DrawingCanvas();
             //canvas.Width = 1000;
             //canvas.Height = 1000;
