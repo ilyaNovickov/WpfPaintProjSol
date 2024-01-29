@@ -9,8 +9,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <ScrollViewer x:Name="scrollViewer" x:FieldModifier="private" HorizontalScrollBarVisibility="Auto" >
         <Canvas x:Name="canvas" x:FieldModifier="private" 
-                Background="DarkGray" Width="100" Height="100" ClipToBounds="True">
-            <extra:Round Width="50" Height="50" Fill="Aqua" Stroke="Black"/>
+                Background="DarkGray" Width="0" Height="0" ClipToBounds="True">
+
         </Canvas>
     </ScrollViewer>
 </UserControl>
