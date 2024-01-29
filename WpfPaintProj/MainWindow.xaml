@@ -60,7 +60,7 @@
                         <ScrollViewer>
                             <WrapPanel>
                                 <Button Content="Квадрат" MinHeight="0" MinWidth="0" x:Name="rectButton" Click="ShapeButton_Click" Margin="5, 5, 5, 5"/>
-                                <Button Content="Круг" MinHeight="0" MinWidth="0" x:Name="ellipseButton" Click="ShapeButton_Click" Margin="5, 5, 5, 5"/>
+                                <Button Content="Эллипс" MinHeight="0" MinWidth="0" x:Name="ellipseButton" Click="ShapeButton_Click" Margin="5, 5, 5, 5"/>
                                 <Button Content="Треугольник" MinHeight="0" MinWidth="0" x:Name="triangleButton" Click="ShapeButton_Click" Margin="5, 5, 5, 5"/>
                                 
                             </WrapPanel>
