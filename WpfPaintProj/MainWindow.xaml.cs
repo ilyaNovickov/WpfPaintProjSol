@@ -48,6 +48,12 @@ namespace WpfPaintProj
                 selectedShape = StandartShapes.Rectangele;
             else if (sender == triangleButton)
                 selectedShape = StandartShapes.Triangle;
+            else if (sender == squareButton)
+                selectedShape = StandartShapes.Square;
+            else if (sender == roundButton)
+                selectedShape = StandartShapes.Round;
+            else if (sender == rhombButton)
+                selectedShape = StandartShapes.Rhomb;
         }
 
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
@@ -78,6 +84,12 @@ namespace WpfPaintProj
                     Canvas.SetLeft(rectangle, e.GetPosition(drawingCanvas).X - rectangle.Width / 2d);
                     Canvas.SetTop(rectangle, e.GetPosition(drawingCanvas).Y - rectangle.Height / 2d);
                     drawingCanvas.AddShape(rectangle);
+                    break;
+                case StandartShapes.Round:
+                    break;
+                case StandartShapes.Square:
+                    break;
+                case StandartShapes.Rhomb:
                     break;
             }
 
