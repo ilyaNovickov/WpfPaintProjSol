@@ -26,8 +26,8 @@ namespace WpfPaintProj.OwnShapes
                 TranslateTransform t = new TranslateTransform(ActualWidth / 2, ActualHeight / 2);
                 geometry = new EllipseGeometry();
                 geometry.Transform = t;
-                geometry.RadiusX = this.ActualWidth / 2;
-                geometry.RadiusY = this.ActualHeight / 2;
+                geometry.RadiusX = this.Width / 2;
+                geometry.RadiusY = this.Height / 2;
                 return geometry;
             }
         }
