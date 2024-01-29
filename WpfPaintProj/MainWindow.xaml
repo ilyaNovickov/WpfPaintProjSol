@@ -40,11 +40,11 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Border BorderBrush="Gray" BorderThickness="2" Grid.Column="0" Grid.Row="1">
-                <ScrollViewer  x:Name="mainScrollViewer" HorizontalScrollBarVisibility="Auto" Background="Gray">
+                <!--<ScrollViewer  x:Name="mainScrollViewer" HorizontalScrollBarVisibility="Auto" Background="Gray">-->
                     <extra:DrawingControl x:Name="drawingControl" Background="Gray">
     
-</extra:DrawingControl>
-                </ScrollViewer>
+                    </extra:DrawingControl>
+                <!--</ScrollViewer>-->
                 
             </Border>
             <Border BorderBrush="Gray" BorderThickness="2" Grid.Row="2" Grid.Column="2">
