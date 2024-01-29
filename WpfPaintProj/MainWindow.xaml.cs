@@ -60,38 +60,50 @@ namespace WpfPaintProj
         {
             if (!isDraw)
                 return;
+
+            Shape shapeToAdd = null;
+
             switch (selectedShape)
             {
                 case null:
                 default:
                     return;
                 case StandartShapes.Ellipse:
-                    Ellipse ellipse = new Ellipse();
-                    ellipse.Width = widthUpDown.Value.Value;
-                    ellipse.Height = heightUpDown.Value.Value;
-                    ellipse.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
-                    ellipse.Stroke = new SolidColorBrush(foreColorPicker.SelectedColor.Value);
-                    Canvas.SetLeft(ellipse, e.GetPosition(drawingCanvas).X - ellipse.Width / 2d);
-                    Canvas.SetTop(ellipse, e.GetPosition(drawingCanvas).Y - ellipse.Height / 2d);
-                    drawingCanvas.AddShape(ellipse);
+                    shapeToAdd = new Ellipse();
+                    shapeToAdd.Width = widthUpDown.Value.Value;
+                    shapeToAdd.Height = heightUpDown.Value.Value;
                     break;
                 case StandartShapes.Rectangele:
-                    Rectangle rectangle = new Rectangle();
-                    rectangle.Width = widthUpDown.Value.Value;
-                    rectangle.Height = heightUpDown.Value.Value;
-                    rectangle.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
-                    rectangle.Stroke = new SolidColorBrush(foreColorPicker.SelectedColor.Value);
-                    Canvas.SetLeft(rectangle, e.GetPosition(drawingCanvas).X - rectangle.Width / 2d);
-                    Canvas.SetTop(rectangle, e.GetPosition(drawingCanvas).Y - rectangle.Height / 2d);
-                    drawingCanvas.AddShape(rectangle);
+                    shapeToAdd = new Rectangle();
+                    shapeToAdd.Width = widthUpDown.Value.Value;
+                    shapeToAdd.Height = heightUpDown.Value.Value;
+                    break;
+                case StandartShapes.Triangle:
+                    shapeToAdd = new Triangle();
+                    shapeToAdd.Width = widthUpDown.Value.Value;
+                    shapeToAdd.Height = heightUpDown.Value.Value;
                     break;
                 case StandartShapes.Round:
+                    shapeToAdd = new Round();
+                    shapeToAdd.Width = widthUpDown.Value.Value;
+                    shapeToAdd.Height = heightUpDown.Value.Value;
                     break;
                 case StandartShapes.Square:
+                    shapeToAdd = new Square();
+                    shapeToAdd.Width = widthUpDown.Value.Value;
+                    shapeToAdd.Height = heightUpDown.Value.Value;
                     break;
                 case StandartShapes.Rhomb:
+                    shapeToAdd = new Rhomb();
+                    shapeToAdd.Width = widthUpDown.Value.Value;
+                    shapeToAdd.Height = heightUpDown.Value.Value;
                     break;
             }
+            shapeToAdd.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
+            shapeToAdd.Stroke = new SolidColorBrush(foreColorPicker.SelectedColor.Value);
+            Canvas.SetLeft(shapeToAdd, e.GetPosition(drawingCanvas).X - shapeToAdd.Width / 2d);
+            Canvas.SetTop(shapeToAdd, e.GetPosition(drawingCanvas).Y - shapeToAdd.Height / 2d);
+            drawingCanvas.AddShape(shapeToAdd);
 
             isDraw = false;
             selectedShape = null;
