@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using WpfPaintProj.ExtraControls;
 using WpfPaintProj.OwnShapes;
+using System.Collections.ObjectModel;
 
 namespace WpfPaintProj
 {
@@ -24,6 +25,8 @@ namespace WpfPaintProj
     public partial class MainWindow : Window
     {
         private Layer drawingCanvas = null;
+
+        public ObservableCollection<ShapeItem> Shapes => drawingCanvas?.Shapes;
 
         private bool isDraw = false;
         private StandartShapes? selectedShape = null;
