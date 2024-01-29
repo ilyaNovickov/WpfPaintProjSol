@@ -92,6 +92,7 @@
     </Compile>
     <Compile Include="Helpers\ResizeDirection.cs" />
     <Compile Include="Helpers\ShapeExtraMethods.cs" />
+    <Compile Include="OwnShapes\Rhomb.cs" />
     <Compile Include="OwnShapes\EllipseV.cs" />
     <Compile Include="OwnShapes\IControlPoints.cs" />
     <Compile Include="StandartShapes.cs" />
