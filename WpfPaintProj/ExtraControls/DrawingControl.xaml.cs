@@ -38,7 +38,7 @@ namespace WpfPaintProj.ExtraControls
         {
             Layer layer = new Layer();
             layer.Width = 100;
-            layer.Height = 1000;
+            layer.Height = 100;
             drawingCanvas.Add(layer);
             layer.SizeChanged += Layer_SizeChanged;
             this.canvas.Children.Add(drawingCanvas.Last());
