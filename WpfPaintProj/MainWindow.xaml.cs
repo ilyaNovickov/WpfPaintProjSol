@@ -48,10 +48,10 @@ namespace WpfPaintProj
                 selectedShape = StandartShapes.Rectangele;
             else if (sender == triangleButton)
                 selectedShape = StandartShapes.Triangle;
-            else if (sender == squareButton)
-                selectedShape = StandartShapes.Square;
-            else if (sender == roundButton)
-                selectedShape = StandartShapes.Round;
+            //else if (sender == squareButton)
+            //    selectedShape = StandartShapes.Square;
+            //else if (sender == roundButton)
+            //    selectedShape = StandartShapes.Round;
             else if (sender == rhombButton)
                 selectedShape = StandartShapes.Rhomb;
         }
@@ -136,6 +136,8 @@ namespace WpfPaintProj
             drawingCanvas.MouseDown += canvas_MouseDown;
             drawingCanvas.Width = 500;
             drawingCanvas.Height = 500;
+
+            shapesListBox.ItemsSource = drawingCanvas.Shapes;
         }
     }
 }

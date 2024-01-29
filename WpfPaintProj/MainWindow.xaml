@@ -68,8 +68,8 @@
                             </WrapPanel>
                         </ScrollViewer>
                     </GroupBox>
-                    <!--<ListBox Grid.Row="2" Background="Aqua">
-                    </ListBox>-->
+                    <ListBox x:Name="shapesListBox" Grid.Row="2">
+                    </ListBox>
                 </Grid>
             </Border>
         </Grid>

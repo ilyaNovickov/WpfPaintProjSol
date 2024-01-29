@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,13 @@ namespace WpfPaintProj.ExtraControls
 {
     public class Layer : Canvas
     {
+        private ObservableCollection<ShapeItem> shapes = new ObservableCollection<ShapeItem>();
+
+        public ObservableCollection<ShapeItem> Shapes
+        {
+            get => shapes;
+        }
+
         //Выбранная фигура
         private Shape selectedShape = null;
 
@@ -116,6 +124,8 @@ namespace WpfPaintProj.ExtraControls
         public void AddShape(Shape shape)
         {
             this.Children.Add(shape);
+            ShapeItem shapeItem = new ShapeItem(shape);
+            shapes.Add(shapeItem);
         }
 
         public void ResetSelectedShape()

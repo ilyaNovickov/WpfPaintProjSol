@@ -11,8 +11,6 @@ namespace WpfPaintProj.OwnShapes
 {
     public class Square : Shape
     {
-        private Geometry geometry;
-
         public Square()
         {
             this.StrokeThickness = 1;
