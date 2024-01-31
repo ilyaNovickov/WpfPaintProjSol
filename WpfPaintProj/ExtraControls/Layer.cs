@@ -134,6 +134,23 @@ namespace WpfPaintProj.ExtraControls
             shapes.Add(shapeItem);
         }
 
+        public void RemoveShape(Shape shape)
+        {
+            List<ShapeItem> extra = shapes.ToList();
+            extra.Reverse();
+            int index = extra.IndexOf(new ShapeItem(shape));
+            if (index == -1)
+                return;
+            shapes.RemoveAt(index);
+
+        }
+
+        public void RemoveSelectedShape()
+        {
+            RemoveShape(selectedShape);
+            SelectedShape = null;
+        }
+
         public void ResetSelectedShape()
         {
             SelectedShape = null;
