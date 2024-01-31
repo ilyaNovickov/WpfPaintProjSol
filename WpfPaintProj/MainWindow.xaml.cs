@@ -143,14 +143,38 @@ namespace WpfPaintProj
             selectedLayer = drawingControl.Layers.Last();
             selectedLayer.Background = Brushes.White;
             selectedLayer.MouseDown += canvas_MouseDown;
+            selectedLayer.SelectedShapeChange += SelectedLayer_SelectedShapeChange;
             selectedLayer.Width = 500;
             selectedLayer.Height = 500;
 
             shapesListBox.ItemsSource = selectedLayer.Shapes;
         }
 
+        private void SelectedLayer_SelectedShapeChange(object sender, EventArgs e)
+        {
+            int index = -1;
+            for (int i = 0; i < shapesListBox.Items.Count; i++)
+            {
+                if (((ShapeItem)shapesListBox.Items[i]).Shape == selectedLayer.SelectedShape)
+                    index = i;
+
+            }
+
+            if (index == -1)
+            {
+                shapesListBox.SelectedItem = null;
+                return;
+            }
+
+            shapesListBox.SelectedItem = shapesListBox.Items[index];
+
+        }
+
         private void shapesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count == 0)
+                return;
+
             int index = drawingControl.Layers.First().Shapes.IndexOf((ShapeItem)e.AddedItems[0]);
             drawingControl.Layers.First().SelectedShape = drawingControl.Layers.First().Shapes[index].Shape;
         }

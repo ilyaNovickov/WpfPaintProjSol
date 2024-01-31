@@ -60,6 +60,7 @@ namespace WpfPaintProj.ExtraControls
             get => selectedShape;
             set
             {
+                Shape prevValue = selectedShape;
                 selectedShape = value;
 
                 //Очистка от вспомогательных фигур
@@ -75,7 +76,8 @@ namespace WpfPaintProj.ExtraControls
                     GetControlPoints(selectedShape);
                 }
 
-                SelectedShapeChange?.Invoke(this, EventArgs.Empty);
+                //if (prevValue != value)
+                    SelectedShapeChange?.Invoke(this, EventArgs.Empty);
             }
         }
 
