@@ -351,32 +351,5 @@ namespace WpfPaintProj.ExtraControls
             }
         }
 
-        //private void Canvas_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (selectedShape == null)
-        //        return;
-
-        //    double dx = 0;
-        //    double dy = 0;
-
-        //    if (e.Key == Key.Up)
-        //    {
-        //        dy += 1d;
-        //    }
-        //    if (e.Key == Key.Down)
-        //    {
-        //        dy -= 1d;
-        //    }
-        //    if (e.Key == Key.Left)
-        //    {
-        //        dx += 1d;
-        //    }
-        //    if (e.Key == Key.Right)
-        //    {
-        //        dx -= 1d;
-        //    }
-
-        //    MoveSelectedShape(dx, dy);
-        //}
     }
 }

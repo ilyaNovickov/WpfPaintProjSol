@@ -9,21 +9,21 @@ namespace WpfPaintProj.ExtraControls
 {
     public struct ShapeItem
     {
-        private static int count = 0;
+        //private static int count = 0;
 
         public ShapeItem(Shape shape)
         {
-            Name = null;
+            //Name = null;
             Shape = shape;
-            count++;
+            //count++;
         }
 
-        public string Name { get; set; }
+        //public string Name { get; set; }
         public Shape Shape { get; set; }
 
         public override string ToString()
         {
-            return Shape.ToString().Split('.').Last() + count;
+            return Shape.ToString().Split('.').Last();// + count;
         }
     }
 }

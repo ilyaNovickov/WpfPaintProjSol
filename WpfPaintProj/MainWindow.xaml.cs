@@ -26,7 +26,8 @@ namespace WpfPaintProj
     {
         private Layer selectedLayer = null;
 
-        public ObservableCollection<ShapeItem> Shapes => selectedLayer?.Shapes;
+        public ObservableCollection<ShapeItem> Shapes => selectedLayer != null ? 
+            new ObservableCollection<ShapeItem>(selectedLayer.Shapes) : null;//selectedLayer?.Shapes;
 
         private bool isDraw = false;
         private StandartShapes? selectedShape = null;
@@ -139,6 +140,8 @@ namespace WpfPaintProj
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
+            if (drawingControl.Layers.Count != 0)
+                return;
             this.drawingControl.AddLayer();
             selectedLayer = drawingControl.Layers.Last();
             selectedLayer.Background = Brushes.White;
@@ -149,7 +152,7 @@ namespace WpfPaintProj
 
             shapesListBox.ItemsSource = selectedLayer.Shapes;
         }
-
+        #region Select shape
         private void SelectedLayer_SelectedShapeChange(object sender, EventArgs e)
         {
             int index = -1;
@@ -178,5 +181,6 @@ namespace WpfPaintProj
             int index = drawingControl.Layers.First().Shapes.IndexOf((ShapeItem)e.AddedItems[0]);
             drawingControl.Layers.First().SelectedShape = drawingControl.Layers.First().Shapes[index].Shape;
         }
+        #endregion
     }
 }
