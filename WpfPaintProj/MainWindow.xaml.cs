@@ -24,9 +24,9 @@ namespace WpfPaintProj
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Layer drawingCanvas = null;
+        private Layer selectedLayer = null;
 
-        public ObservableCollection<ShapeItem> Shapes => drawingCanvas?.Shapes;
+        public ObservableCollection<ShapeItem> Shapes => selectedLayer?.Shapes;
 
         private bool isDraw = false;
         private StandartShapes? selectedShape = null;
@@ -36,12 +36,18 @@ namespace WpfPaintProj
             InitializeComponent();
         }
 
+        public Shape SelectedShape
+        {
+            get;
+            set;
+        }
+
         private void ShapeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (drawingCanvas != null)
+            if (selectedLayer != null)
             {
-                drawingCanvas.CanSelectShapes = false;
-                drawingCanvas.ResetSelectedShape();
+                selectedLayer.CanSelectShapes = false;
+                selectedLayer.ResetSelectedShape();
             }
 
             isDraw = true;
@@ -104,13 +110,13 @@ namespace WpfPaintProj
             }
             shapeToAdd.Fill = new SolidColorBrush(bgColorPicker.SelectedColor.Value);
             shapeToAdd.Stroke = new SolidColorBrush(foreColorPicker.SelectedColor.Value);
-            Canvas.SetLeft(shapeToAdd, e.GetPosition(drawingCanvas).X - shapeToAdd.Width / 2d);
-            Canvas.SetTop(shapeToAdd, e.GetPosition(drawingCanvas).Y - shapeToAdd.Height / 2d);
-            drawingCanvas.AddShape(shapeToAdd);
+            Canvas.SetLeft(shapeToAdd, e.GetPosition(selectedLayer).X - shapeToAdd.Width / 2d);
+            Canvas.SetTop(shapeToAdd, e.GetPosition(selectedLayer).Y - shapeToAdd.Height / 2d);
+            selectedLayer.AddShape(shapeToAdd);
 
             isDraw = false;
             selectedShape = null;
-            drawingCanvas.CanSelectShapes = true;
+            selectedLayer.CanSelectShapes = true;
         }
 
         #region ChooseColor
@@ -134,13 +140,19 @@ namespace WpfPaintProj
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
             this.drawingControl.AddLayer();
-            drawingCanvas = drawingControl.Layers.Last();
-            drawingCanvas.Background = Brushes.White;
-            drawingCanvas.MouseDown += canvas_MouseDown;
-            drawingCanvas.Width = 500;
-            drawingCanvas.Height = 500;
+            selectedLayer = drawingControl.Layers.Last();
+            selectedLayer.Background = Brushes.White;
+            selectedLayer.MouseDown += canvas_MouseDown;
+            selectedLayer.Width = 500;
+            selectedLayer.Height = 500;
 
-            shapesListBox.ItemsSource = drawingCanvas.Shapes;
+            shapesListBox.ItemsSource = selectedLayer.Shapes;
+        }
+
+        private void shapesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = drawingControl.Layers.First().Shapes.IndexOf((ShapeItem)e.AddedItems[0]);
+            drawingControl.Layers.First().SelectedShape = drawingControl.Layers.First().Shapes[index].Shape;
         }
     }
 }

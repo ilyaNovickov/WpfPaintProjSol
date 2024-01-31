@@ -68,7 +68,9 @@
                             </WrapPanel>
                         </ScrollViewer>
                     </GroupBox>
-                    <ListBox x:Name="shapesListBox" Grid.Row="2" ItemsSource="{Binding Path=Shapes}">
+                    <ListBox x:Name="shapesListBox" Grid.Row="2" 
+                             ItemsSource="{Binding Path=Shapes}"
+                             SelectionChanged="shapesListBox_SelectionChanged">
                     </ListBox>
                 </Grid>
             </Border>

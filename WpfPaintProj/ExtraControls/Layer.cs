@@ -58,7 +58,7 @@ namespace WpfPaintProj.ExtraControls
         public Shape SelectedShape
         {
             get => selectedShape;
-            private set
+            set
             {
                 selectedShape = value;
 
@@ -74,8 +74,12 @@ namespace WpfPaintProj.ExtraControls
                 {
                     GetControlPoints(selectedShape);
                 }
+
+                SelectedShapeChange?.Invoke(this, EventArgs.Empty);
             }
         }
+
+        public event EventHandler SelectedShapeChange;
 
         //Получение вспомогательных точек
         private void GetControlPoints(Shape shape)
