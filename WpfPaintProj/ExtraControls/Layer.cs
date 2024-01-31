@@ -137,12 +137,12 @@ namespace WpfPaintProj.ExtraControls
         public void RemoveShape(Shape shape)
         {
             List<ShapeItem> extra = shapes.ToList();
-            extra.Reverse();
+            //extra.Reverse();
             int index = extra.IndexOf(new ShapeItem(shape));
             if (index == -1)
                 return;
             shapes.RemoveAt(index);
-
+            this.Children.RemoveAt(index);
         }
 
         public void RemoveSelectedShape()

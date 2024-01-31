@@ -37,12 +37,6 @@ namespace WpfPaintProj
             InitializeComponent();
         }
 
-        public Shape SelectedShape
-        {
-            get;
-            set;
-        }
-
         private void ShapeButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectedLayer != null)
@@ -182,5 +176,10 @@ namespace WpfPaintProj
             drawingControl.Layers.First().SelectedShape = drawingControl.Layers.First().Shapes[index].Shape;
         }
         #endregion
+
+        private void DeleteShapeButton_Click(object sender, RoutedEventArgs e)
+        {
+            selectedLayer?.RemoveSelectedShape();
+        }
     }
 }

@@ -26,6 +26,8 @@
             <Separator/>
             <Label>Задний план</Label>
             <xctk:ColorPicker x:Name="bgColorPicker" SelectedColor="White"/>
+            <Separator/>
+            <Button Content="Удалить фигуру" Click="DeleteShapeButton_Click"/>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom">
             <TextBlock x:Name="optionTextBlock" Text="Курсор"/>
