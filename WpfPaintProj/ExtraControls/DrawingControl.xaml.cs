@@ -106,5 +106,9 @@ namespace WpfPaintProj.ExtraControls
             this.canvas.Height = maxSize.Height;
         }
         #endregion
+
+        #region ForUndo
+
+        #endregion
     }
 }
