@@ -24,6 +24,8 @@ namespace WpfPaintProj.ExtraControls
     {
         private ObservableCollection<Layer> drawingCanvas = new ObservableCollection<Layer>();
 
+        
+
         public DrawingControl()
         {
             InitializeComponent();
