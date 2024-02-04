@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace WpfPaintProj.UndoRedo
 {
-    public abstract class DoBase
+    public abstract class DoBase<T, K> where T : Delegate where K : struct
     {
-        protected Delegate action;
-        protected Delegate inverseAction;
-        protected ValueType args;
+        protected T action;
+        protected T inverseAction;
+        protected K args;
 
-        public DoBase(Delegate action, Delegate inverseAction, ValueType args) 
+        public DoBase(T action, T inverseAction, K args) 
         {
             this.action = action;
             this.inverseAction = inverseAction;
@@ -21,9 +21,9 @@ namespace WpfPaintProj.UndoRedo
 
         public event EventHandler InversedActionInvoked;
 
-        public Delegate Action { get { return action; } }
-        public Delegate InverseAction { get { return inverseAction; } }
-        public ValueType Args { get { return args; } }
+        public T Action { get { return action; } }
+        public T InverseAction { get { return inverseAction; } }
+        public K Args { get { return args; } }
 
         public void Invoke()
         {

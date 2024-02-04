@@ -7,16 +7,18 @@ using System.Windows.Shapes;
 
 namespace WpfPaintProj.UndoRedo
 {
-    public class AddDoAction : DoBase
+    public delegate void AddRemoveDelegate(Shape shape);
+
+    public class AddDoAction : DoBase<AddRemoveDelegate, AddDoArgs>
     {
-        public AddDoAction(Delegate action, Delegate inverseAction, ValueType args) : base(action, inverseAction, args)
+        public AddDoAction(AddRemoveDelegate action, AddRemoveDelegate inverseAction, AddDoArgs args) : base(action, inverseAction, args)
         {
             
         }
 
         protected override void _Invoke()
         {
-            ((Action<Shape>)inverseAction).Invoke(((AddDoArgs)args).AddedShape);
+            inverseAction.Invoke(args.AddedShape);
         }
     }
 
