@@ -70,10 +70,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="UndoRedo\AddDoAction.cs" />
-    <Compile Include="UndoRedo\RemoveDoAction.cs" />
+    <Compile Include="UndoRedo\AddRemove\AddDoAction.cs" />
+    <Compile Include="UndoRedo\AddRemove\RemoveDoAction.cs" />
     <Compile Include="UndoRedo\IUnReDo.cs" />
     <Compile Include="UndoRedo\DoBase.cs" />
+    <Compile Include="UndoRedo\Move\MoveDoAction.cs" />
     <Page Include="ExtraControls\DrawingCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
