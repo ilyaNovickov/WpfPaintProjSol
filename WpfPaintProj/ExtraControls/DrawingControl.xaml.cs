@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfPaintProj.UndoRedo;
 
 namespace WpfPaintProj.ExtraControls
 {
@@ -23,8 +24,6 @@ namespace WpfPaintProj.ExtraControls
     public partial class DrawingControl : UserControl
     {
         private ObservableCollection<Layer> drawingCanvas = new ObservableCollection<Layer>();
-
-        
 
         public DrawingControl()
         {
@@ -110,7 +109,10 @@ namespace WpfPaintProj.ExtraControls
         #endregion
 
         #region ForUndo
-
+        public void Undo()
+        {
+            drawingCanvas.First().Undo();
+        }
         #endregion
     }
 }

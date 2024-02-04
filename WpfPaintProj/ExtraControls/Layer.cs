@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using WpfPaintProj.Helpers;
+using WpfPaintProj.UndoRedo;
 
 namespace WpfPaintProj.ExtraControls
 {
@@ -132,6 +133,8 @@ namespace WpfPaintProj.ExtraControls
             this.Children.Add(shape);
             ShapeItem shapeItem = new ShapeItem(shape);
             shapes.Add(shapeItem);
+
+            undoStack.Push(new AddDoAction(this.AddShape, this.RemoveShape, new AddDoArgs() { AddedShape = shape}));
         }
 
         public void RemoveShape(Shape shape)
@@ -367,6 +370,16 @@ namespace WpfPaintProj.ExtraControls
                 shapes.Offset(dx, dy);
             }
         }
+
+
+
+        private Stack<IUnReDo> undoStack = new Stack<IUnReDo>(1);
+
+        public void Undo()
+        {
+            undoStack.Pop().Invoke();
+        }
+
 
     }
 }
