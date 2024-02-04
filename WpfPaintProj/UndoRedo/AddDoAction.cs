@@ -9,21 +9,26 @@ namespace WpfPaintProj.UndoRedo
 {
     public delegate void AddRemoveDelegate(Shape shape);
 
-    public class AddDoAction : DoBase<AddRemoveDelegate, AddDoArgs>
+    public class AddDoAction : DoBase<AddRemoveDelegate, AddRemoveDoArgs>
     {
-        public AddDoAction(AddRemoveDelegate action, AddRemoveDelegate inverseAction, AddDoArgs args) : base(action, inverseAction, args)
+        public AddDoAction(AddRemoveDelegate action, AddRemoveDelegate inverseAction, AddRemoveDoArgs args) : base(action, inverseAction, args)
         {
             
         }
 
         protected override void _Invoke()
         {
-            inverseAction.Invoke(args.AddedShape);
+            inverseAction.Invoke(args.Shape);
+        }
+
+        public override IUnReDo GetInversedAction()
+        {
+            return new RemoveDoAction(this.InverseAction, this.Action, this.Args);
         }
     }
 
-    public struct AddDoArgs
+    public struct AddRemoveDoArgs
     {
-        public Shape AddedShape { get; set; }
+        public Shape Shape { get; set; }
     }
 }

@@ -186,5 +186,10 @@ namespace WpfPaintProj
         {
             this.drawingControl.Undo();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.drawingControl.Redo();
+        }
     }
 }

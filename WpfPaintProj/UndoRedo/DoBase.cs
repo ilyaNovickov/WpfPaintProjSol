@@ -33,5 +33,6 @@ namespace WpfPaintProj.UndoRedo
 
         protected abstract void _Invoke();
 
+        public abstract IUnReDo GetInversedAction();
     }
 }

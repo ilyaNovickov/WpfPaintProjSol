@@ -130,14 +130,28 @@ namespace WpfPaintProj.ExtraControls
 
         public void AddShape(Shape shape)
         {
+            _AddShape(shape, saveDoStory);
+        }
+
+        private void _AddShape(Shape shape, bool undo)
+        {
             this.Children.Add(shape);
             ShapeItem shapeItem = new ShapeItem(shape);
             shapes.Add(shapeItem);
 
-            undoStack.Push(new AddDoAction(this.AddShape, this.RemoveShape, new AddDoArgs() { AddedShape = shape}));
+            if (undo)
+            {
+                undoStack.Push(new AddDoAction(this.AddShape, this.RemoveShape, new AddRemoveDoArgs() { Shape = shape }));
+                redoStack.Clear();
+            }
         }
 
         public void RemoveShape(Shape shape)
+        {
+            _RemoveShape(shape, saveDoStory);
+        }
+
+        private void _RemoveShape(Shape shape, bool undo)
         {
             List<ShapeItem> extra = shapes.ToList();
             //extra.Reverse();
@@ -146,6 +160,12 @@ namespace WpfPaintProj.ExtraControls
                 return;
             shapes.RemoveAt(index);
             this.Children.RemoveAt(index);
+
+            if (undo)
+            {
+                undoStack.Push(new RemoveDoAction(this.RemoveShape, this.AddShape, new AddRemoveDoArgs() { Shape = shape }));
+                redoStack.Clear();
+            }
         }
 
         public void RemoveSelectedShape()
@@ -372,14 +392,32 @@ namespace WpfPaintProj.ExtraControls
         }
 
 
+        private bool saveDoStory = true;
 
         private Stack<IUnReDo> undoStack = new Stack<IUnReDo>(1);
+        private Stack<IUnReDo> redoStack = new Stack<IUnReDo>(1);
 
         public void Undo()
         {
-            undoStack.Pop().Invoke();
+            if (undoStack.Count == 0)
+                return;
+            saveDoStory = false;
+            IUnReDo action = undoStack.Pop();
+            action.Invoke();
+            redoStack.Push(action.GetInversedAction());
+            saveDoStory = true;
         }
 
+        public void Redo()
+        {
+            if (redoStack.Count == 0)
+                return;
+            saveDoStory = false;
+            IUnReDo action = redoStack.Pop();
+            action.Invoke();
+            undoStack.Push(action.GetInversedAction());
+            saveDoStory = true;
+        }
 
     }
 }

@@ -113,6 +113,11 @@ namespace WpfPaintProj.ExtraControls
         {
             drawingCanvas.First().Undo();
         }
+
+        public void Redo()
+        {
+            drawingCanvas.First().Redo();
+        }
         #endregion
     }
 }

@@ -8,7 +8,7 @@ namespace WpfPaintProj.UndoRedo
 {
     public interface IUnReDo
     {
-
+        IUnReDo GetInversedAction();
         void Invoke();
         event EventHandler InversedActionInvoked;
     }
