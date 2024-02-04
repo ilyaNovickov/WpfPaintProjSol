@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfPaintProj.UndoRedo
 {
-    public abstract class DoBase<T, K> where T : Delegate where K : struct
+    public abstract class DoBase<T, K> : IUnReDo where T : Delegate where K : struct
     {
         protected T action;
         protected T inverseAction;

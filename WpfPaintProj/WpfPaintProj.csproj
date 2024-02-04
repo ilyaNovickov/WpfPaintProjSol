@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="UndoRedo\AddDoAction.cs" />
+    <Compile Include="UndoRedo\IUnReDo.cs" />
     <Compile Include="UndoRedo\DoBase.cs" />
     <Page Include="ExtraControls\DrawingCanvas.xaml">
       <SubType>Designer</SubType>
