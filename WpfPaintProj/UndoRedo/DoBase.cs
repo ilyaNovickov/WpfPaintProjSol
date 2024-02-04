@@ -8,9 +8,9 @@ namespace WpfPaintProj.UndoRedo
 {
     public abstract class DoBase
     {
-        private Delegate action;
-        private Delegate inverseAction;
-        private ValueType args;
+        protected Delegate action;
+        protected Delegate inverseAction;
+        protected ValueType args;
 
         public DoBase(Delegate action, Delegate inverseAction, ValueType args) 
         {
@@ -19,11 +19,19 @@ namespace WpfPaintProj.UndoRedo
             this.args = args;
         }
 
+        public event EventHandler InversedActionInvoked;
+
         public Delegate Action { get { return action; } }
         public Delegate InverseAction { get { return inverseAction; } }
         public ValueType Args { get { return args; } }
 
-        public abstract void Invoke();
+        public void Invoke()
+        {
+            _Invoke();
+            InversedActionInvoked?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected abstract void _Invoke();
 
     }
 }
