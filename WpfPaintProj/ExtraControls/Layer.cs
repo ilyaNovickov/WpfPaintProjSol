@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using WpfPaintProj.Helpers;
 using WpfPaintProj.UndoRedo;
+using WpfPaintProj.UndoRedo.Move;
 
 namespace WpfPaintProj.ExtraControls
 {
@@ -127,7 +128,7 @@ namespace WpfPaintProj.ExtraControls
             this.Children.Add(rect);
             moveShape = rect;
         }
-
+        #region AddRemoveMethods
         public void AddShape(Shape shape)
         {
             _AddShape(shape);
@@ -181,6 +182,7 @@ namespace WpfPaintProj.ExtraControls
             RemoveShape(selectedShape);
             SelectedShape = null;
         }
+#endregion
 
         public void ResetSelectedShape()
         {
@@ -208,6 +210,7 @@ namespace WpfPaintProj.ExtraControls
                             {
                                 this.Cursor = Cursors.SizeAll;
                                 isDragging = true;
+                                oldShapePosition = selectedShape.GetCanvasPoint();
                             }
                             //Попало в точку для изменения размера
                             else if (resizeShapes.Contains(clickedShape))
@@ -293,8 +296,17 @@ namespace WpfPaintProj.ExtraControls
         {
             this.ReleaseMouseCapture();
 
+            if (isDragging)
+            {
+                isDragging = false;
+
+                undoStack.Push(new MoveDoAction(this.selectedShape.SetCanvasPoint, 
+                    this.selectedShape.SetCanvasPoint, 
+                    new MoveDoArgs() { CurrentPoint = selectedShape.GetCanvasPoint(), 
+                        OldPoint = oldShapePosition }));
+            }
             isResize = false;
-            isDragging = false;
+            
             this.Cursor = Cursors.Arrow;
         }
 
@@ -401,6 +413,7 @@ namespace WpfPaintProj.ExtraControls
 
 
         //private bool saveDoStory = true;
+        private Point oldShapePosition = new Point(0,0);
 
         private Stack<IUnReDo> undoStack = new Stack<IUnReDo>(1);
         private Stack<IUnReDo> redoStack = new Stack<IUnReDo>(1);
