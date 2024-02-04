@@ -162,6 +162,9 @@ namespace WpfPaintProj.ExtraControls
                 return;
             shapes.RemoveAt(index);
             this.Children.RemoveAt(index);
+
+            if (selectedShape == shape)
+                SelectedShape = null;
         }
 
         private void _RemoveShape(Shape shape)
