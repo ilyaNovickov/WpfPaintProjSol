@@ -300,10 +300,10 @@ namespace WpfPaintProj.ExtraControls
             {
                 isDragging = false;
 
-                undoStack.Push(new MoveDoAction(this.selectedShape.SetCanvasPoint, 
-                    this.selectedShape.SetCanvasPoint, 
+                undoStack.Push(new MoveDoAction(this.MoveShapeTo, 
+                    this.MoveShapeTo, 
                     new MoveDoArgs() { CurrentPoint = selectedShape.GetCanvasPoint(), 
-                        OldPoint = oldShapePosition }));
+                        OldPoint = oldShapePosition, Shape = selectedShape }));
             }
             isResize = false;
             
@@ -409,6 +409,22 @@ namespace WpfPaintProj.ExtraControls
             {
                 shapes.Offset(dx, dy);
             }
+        }
+
+        private void MoveShapeTo(Shape shape, Point point)
+        {
+            if (shape == selectedShape)
+            {
+                double dx = point.X - shape.GetCanvasPoint().X;
+                double dy = point.Y - shape.GetCanvasPoint().Y;
+
+                foreach (Shape shape1 in this.controlShapes)
+                {
+                    shape1.Offset(dx, dy);
+                }
+            }
+
+            shape.SetCanvasPoint(point);    
         }
 
 
