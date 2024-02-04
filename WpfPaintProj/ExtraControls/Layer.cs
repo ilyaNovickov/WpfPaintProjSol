@@ -130,42 +130,47 @@ namespace WpfPaintProj.ExtraControls
 
         public void AddShape(Shape shape)
         {
-            _AddShape(shape, saveDoStory);
+            _AddShape(shape);
         }
 
-        private void _AddShape(Shape shape, bool undo)
+        private void __AddShape(Shape shape)
         {
             this.Children.Add(shape);
             ShapeItem shapeItem = new ShapeItem(shape);
             shapes.Add(shapeItem);
+        }
 
-            if (undo)
-            {
-                undoStack.Push(new AddDoAction(this.AddShape, this.RemoveShape, new AddRemoveDoArgs() { Shape = shape }));
-                redoStack.Clear();
-            }
+        private void _AddShape(Shape shape)
+        {
+            __AddShape(shape);
+            undoStack.Push(new AddDoAction(this.__AddShape,
+                this.__RemoveShape, new AddRemoveDoArgs() { Shape = shape }));
+            redoStack.Clear();
+            
         }
 
         public void RemoveShape(Shape shape)
         {
-            _RemoveShape(shape, saveDoStory);
+            _RemoveShape(shape);
         }
 
-        private void _RemoveShape(Shape shape, bool undo)
+        private void __RemoveShape(Shape shape)
         {
             List<ShapeItem> extra = shapes.ToList();
-            //extra.Reverse();
             int index = extra.IndexOf(new ShapeItem(shape));
             if (index == -1)
                 return;
             shapes.RemoveAt(index);
             this.Children.RemoveAt(index);
+        }
 
-            if (undo)
-            {
-                undoStack.Push(new RemoveDoAction(this.RemoveShape, this.AddShape, new AddRemoveDoArgs() { Shape = shape }));
-                redoStack.Clear();
-            }
+        private void _RemoveShape(Shape shape)
+        {
+            __RemoveShape(shape);
+            undoStack.Push(new RemoveDoAction(this.__RemoveShape, 
+                this.__AddShape, new AddRemoveDoArgs() { Shape = shape }));
+            redoStack.Clear();
+            
         }
 
         public void RemoveSelectedShape()
@@ -392,7 +397,7 @@ namespace WpfPaintProj.ExtraControls
         }
 
 
-        private bool saveDoStory = true;
+        //private bool saveDoStory = true;
 
         private Stack<IUnReDo> undoStack = new Stack<IUnReDo>(1);
         private Stack<IUnReDo> redoStack = new Stack<IUnReDo>(1);
@@ -401,22 +406,18 @@ namespace WpfPaintProj.ExtraControls
         {
             if (undoStack.Count == 0)
                 return;
-            saveDoStory = false;
             IUnReDo action = undoStack.Pop();
             action.Invoke();
             redoStack.Push(action.GetInversedAction());
-            saveDoStory = true;
         }
 
         public void Redo()
         {
             if (redoStack.Count == 0)
                 return;
-            saveDoStory = false;
             IUnReDo action = redoStack.Pop();
             action.Invoke();
             undoStack.Push(action.GetInversedAction());
-            saveDoStory = true;
         }
 
     }
