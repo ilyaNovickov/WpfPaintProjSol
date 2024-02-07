@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using WpfPaintProj.Helpers;
 using WpfPaintProj.UndoRedo;
 using WpfPaintProj.UndoRedo.Move;
+using WpfPaintProj.UndoRedo.Resize;
 
 namespace WpfPaintProj.ExtraControls
 {
@@ -215,6 +216,7 @@ namespace WpfPaintProj.ExtraControls
                             //Попало в точку для изменения размера
                             else if (resizeShapes.Contains(clickedShape))
                             {
+                                this.oldSize = new Size(shape.Width, shape.Height);
                                 isResize = true;
                                 OnResizePointClicked(clickedShape);
                             }
@@ -305,8 +307,19 @@ namespace WpfPaintProj.ExtraControls
                     new MoveDoArgs() { CurrentPoint = selectedShape.GetCanvasPoint(), 
                         OldPoint = oldShapePosition, Shape = selectedShape }));
             }
-            isResize = false;
-            
+            if (isResize)
+            {
+                isResize = false;
+
+                undoStack.Push(new ResizeDoAction(ResizeSelectedShape, ResizeSelectedShape, new ResizeArgs()
+                {
+                    Direction = this.resizeDirection,
+                    Shape = selectedShape,
+                    NewSize = new Size(selectedShape.Width, selectedShape.Height),
+                    OldSize = this.oldSize
+                }));
+            }
+
             this.Cursor = Cursors.Arrow;
         }
 
@@ -326,7 +339,7 @@ namespace WpfPaintProj.ExtraControls
             {
                 Point pos = e.GetPosition(this);
 
-                ResizeSelectedShape(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+                ResizeSelectedShape(selectedShape, this.resizeDirection, pos.X - oldPoint.X, pos.Y - oldPoint.Y);
 
                 oldPoint = pos;
             }
@@ -349,47 +362,47 @@ namespace WpfPaintProj.ExtraControls
         }
 
         //Изменение размера выбранной фигуры
-        private void ResizeSelectedShape(double dx, double dy)
+        private void ResizeSelectedShape(Shape shape, ResizeDirection direction, double dx, double dy)
         {
             try
             {
                 switch (this.resizeDirection)
                 {
                     case ResizeDirection.Top:
-                        selectedShape.Height -= dy;
-                        selectedShape.Offset(0, dy);
+                        shape.Height -= dy;
+                        shape.Offset(0, dy);
                         break;
                     case ResizeDirection.Bottom:
-                        selectedShape.Height += dy;
-                        selectedShape.Offset(0, 0);
+                        shape.Height += dy;
+                        shape.Offset(0, 0);
                         break;
                     case ResizeDirection.Left:
-                        selectedShape.Width -= dx;
-                        selectedShape.Offset(dx, 0);
+                        shape.Width -= dx;
+                        shape.Offset(dx, 0);
                         break;
                     case ResizeDirection.Right:
-                        selectedShape.Width += dx;
-                        selectedShape.Offset(0, 0);
+                        shape.Width += dx;
+                        shape.Offset(0, 0);
                         break;
                     case ResizeDirection.TopRight:
-                        selectedShape.Width += dx;
-                        selectedShape.Height -= dy;
-                        selectedShape.Offset(0, dy);
+                        shape.Width += dx;
+                        shape.Height -= dy;
+                        shape.Offset(0, dy);
                         break;
                     case ResizeDirection.BottomRight:
-                        selectedShape.Width += dx;
-                        selectedShape.Height += dy;
-                        selectedShape.Offset(0, 0);
+                        shape.Width += dx;
+                        shape.Height += dy;
+                        shape.Offset(0, 0);
                         break;
                     case ResizeDirection.TopLeft:
-                        selectedShape.Width -= dx;
-                        selectedShape.Height -= dy;
-                        selectedShape.Offset(dx, dy);
+                        shape.Width -= dx;
+                        shape.Height -= dy;
+                        shape.Offset(dx, dy);
                         break;
                     case ResizeDirection.BottomLeft:
-                        selectedShape.Width -= dx;
-                        selectedShape.Height += dy;
-                        selectedShape.Offset(dx, 0);
+                        shape.Width -= dx;
+                        shape.Height += dy;
+                        shape.Offset(dx, 0);
                         break;
                     case ResizeDirection.None:
                     default:
@@ -430,6 +443,7 @@ namespace WpfPaintProj.ExtraControls
 
         //private bool saveDoStory = true;
         private Point oldShapePosition = new Point(0,0);
+        private Size oldSize = new Size(0, 0);
 
         private Stack<IUnReDo> undoStack = new Stack<IUnReDo>(1);
         private Stack<IUnReDo> redoStack = new Stack<IUnReDo>(1);
