@@ -72,9 +72,18 @@
     </ApplicationDefinition>
     <Compile Include="UndoRedo\AddRemove\AddDoAction.cs" />
     <Compile Include="UndoRedo\AddRemove\RemoveDoAction.cs" />
+    <Compile Include="UndoRedo\AddRemoveDo.cs" />
+    <Compile Include="UndoRedo\AddDoRe.cs" />
+    <Compile Include="UndoRedo\ResizeDoRe.cs" />
+    <Compile Include="UndoRedo\ResizeDo.cs" />
+    <Compile Include="UndoRedo\MoveDoRe.cs" />
+    <Compile Include="UndoRedo\MoveDo.cs" />
+    <Compile Include="UndoRedo\RemoveDoRe.cs" />
+    <Compile Include="UndoRedo\UndoRedoManager.cs" />
     <Compile Include="UndoRedo\IUnReDo.cs" />
     <Compile Include="UndoRedo\DoBase.cs" />
     <Compile Include="UndoRedo\Move\MoveDoAction.cs" />
+    <Compile Include="UndoRedo\Resize\ResizeDoAction.cs" />
     <Page Include="ExtraControls\DrawingCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

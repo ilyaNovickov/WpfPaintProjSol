@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
+using WpfPaintProj.Helpers;
 
 namespace WpfPaintProj.ExtraControls
 {
@@ -23,7 +24,7 @@ namespace WpfPaintProj.ExtraControls
 
         public override string ToString()
         {
-            return Shape.ToString().Split('.').Last();// + count;
+            return Shape.ToString().Split('.').Last() + $" [{Shape.GetCanvasPoint().X}, {Shape.GetCanvasPoint().Y}]";// + count;
         }
     }
 }

@@ -108,7 +108,7 @@ namespace WpfPaintProj
             Canvas.SetLeft(shapeToAdd, e.GetPosition(selectedLayer).X - shapeToAdd.Width / 2d);
             Canvas.SetTop(shapeToAdd, e.GetPosition(selectedLayer).Y - shapeToAdd.Height / 2d);
             selectedLayer.AddShape(shapeToAdd);
-
+            
             isDraw = false;
             selectedShape = null;
             selectedLayer.CanSelectShapes = true;
@@ -164,6 +164,12 @@ namespace WpfPaintProj
             }
 
             shapesListBox.SelectedItem = shapesListBox.Items[index];
+            //shapesListBox.UpdateLayout();
+            
+            this.foreColorPicker.SelectedColor = ((SolidColorBrush)((((ShapeItem)shapesListBox.SelectedItem).Shape).Stroke)).Color;
+            this.bgColorPicker.SelectedColor = ((SolidColorBrush)((((ShapeItem)shapesListBox.SelectedItem).Shape).Fill)).Color;
+            this.widthUpDown.Value = ((int)(((ShapeItem)shapesListBox.SelectedItem).Shape).Width);
+            this.heightUpDown.Value = ((int)(((ShapeItem)shapesListBox.SelectedItem).Shape).Height);
 
         }
 

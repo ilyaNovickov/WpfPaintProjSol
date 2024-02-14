@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using WpfPaintProj.Helpers;
 using WpfPaintProj.UndoRedo;
 using WpfPaintProj.UndoRedo.Move;
+using WpfPaintProj.UndoRedo.Resize;
 
 namespace WpfPaintProj.ExtraControls
 {
@@ -53,6 +54,8 @@ namespace WpfPaintProj.ExtraControls
             this.MouseUp += Canvas_MouseUp;
             this.MouseLeave += Canvas_MouseLeave;
             this.MouseMove += Canvas_MouseMove;
+
+            undoManager = new UndoRedoManager(this);
         }
 
         public bool CanSelectShapes { get; set; }
@@ -134,7 +137,7 @@ namespace WpfPaintProj.ExtraControls
             _AddShape(shape);
         }
 
-        private void __AddShape(Shape shape)
+        internal void __AddShape(Shape shape)
         {
             this.Children.Add(shape);
             ShapeItem shapeItem = new ShapeItem(shape);
@@ -144,9 +147,10 @@ namespace WpfPaintProj.ExtraControls
         private void _AddShape(Shape shape)
         {
             __AddShape(shape);
-            undoStack.Push(new AddDoAction(this.__AddShape,
-                this.__RemoveShape, new AddRemoveDoArgs() { Shape = shape }));
-            redoStack.Clear();
+            undoManager.RegistrAction(new AddDoRe(this, new AddRemoveDo(shape)));
+            //undoStack.Push(new AddDoAction(this.__AddShape,
+            //    this.__RemoveShape, new AddRemoveDoArgs() { Shape = shape }));
+            //redoStack.Clear();
             
         }
 
@@ -155,7 +159,7 @@ namespace WpfPaintProj.ExtraControls
             _RemoveShape(shape);
         }
 
-        private void __RemoveShape(Shape shape)
+        internal void __RemoveShape(Shape shape)
         {
             List<ShapeItem> extra = shapes.ToList();
             int index = extra.IndexOf(new ShapeItem(shape));
@@ -171,9 +175,10 @@ namespace WpfPaintProj.ExtraControls
         private void _RemoveShape(Shape shape)
         {
             __RemoveShape(shape);
-            undoStack.Push(new RemoveDoAction(this.__RemoveShape, 
-                this.__AddShape, new AddRemoveDoArgs() { Shape = shape }));
-            redoStack.Clear();
+            undoManager.RegistrAction(new RemoveDoRe(this, new AddRemoveDo(shape)));
+            //undoStack.Push(new RemoveDoAction(this.__RemoveShape, 
+            //    this.__AddShape, new AddRemoveDoArgs() { Shape = shape }));
+            //redoStack.Clear();
             
         }
 
@@ -215,6 +220,7 @@ namespace WpfPaintProj.ExtraControls
                             //Попало в точку для изменения размера
                             else if (resizeShapes.Contains(clickedShape))
                             {
+                                this.oldSize = new Size(shape.Width, shape.Height);
                                 isResize = true;
                                 OnResizePointClicked(clickedShape);
                             }
@@ -300,13 +306,30 @@ namespace WpfPaintProj.ExtraControls
             {
                 isDragging = false;
 
-                undoStack.Push(new MoveDoAction(this.MoveShapeTo, 
-                    this.MoveShapeTo, 
-                    new MoveDoArgs() { CurrentPoint = selectedShape.GetCanvasPoint(), 
-                        OldPoint = oldShapePosition, Shape = selectedShape }));
+                undoManager.RegistrAction(new MoveDoRe(this, new MoveDo(selectedShape, oldShapePosition,
+                    selectedShape.GetCanvasPoint())));
+
+                //undoStack.Push(new MoveDoAction(this.MoveShapeTo, 
+                //    this.MoveShapeTo, 
+                //    new MoveDoArgs() { CurrentPoint = selectedShape.GetCanvasPoint(), 
+                //        OldPoint = oldShapePosition, Shape = selectedShape }));
             }
-            isResize = false;
-            
+            if (isResize)
+            {
+                isResize = false;
+
+                undoManager.RegistrAction(new ResizeDoRe(this, new ResizeDo(selectedShape, oldShapePosition,
+                    selectedShape.GetCanvasPoint(), oldSize, new Size(selectedShape.Width, selectedShape.Height))));
+
+                //undoStack.Push(new ResizeDoAction(ResizeSelectedShape, ResizeSelectedShape, new ResizeArgs()
+                //{
+                //    Direction = this.resizeDirection,
+                //    Shape = selectedShape,
+                //    NewSize = new Size(selectedShape.Width, selectedShape.Height),
+                //    OldSize = this.oldSize
+                //}));
+            }
+
             this.Cursor = Cursors.Arrow;
         }
 
@@ -326,7 +349,7 @@ namespace WpfPaintProj.ExtraControls
             {
                 Point pos = e.GetPosition(this);
 
-                ResizeSelectedShape(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+                ResizeSelectedShape(selectedShape, this.resizeDirection, pos.X - oldPoint.X, pos.Y - oldPoint.Y);
 
                 oldPoint = pos;
             }
@@ -349,47 +372,47 @@ namespace WpfPaintProj.ExtraControls
         }
 
         //Изменение размера выбранной фигуры
-        private void ResizeSelectedShape(double dx, double dy)
+        private void ResizeSelectedShape(Shape shape, ResizeDirection direction, double dx, double dy)
         {
             try
             {
                 switch (this.resizeDirection)
                 {
                     case ResizeDirection.Top:
-                        selectedShape.Height -= dy;
-                        selectedShape.Offset(0, dy);
+                        shape.Height -= dy;
+                        shape.Offset(0, dy);
                         break;
                     case ResizeDirection.Bottom:
-                        selectedShape.Height += dy;
-                        selectedShape.Offset(0, 0);
+                        shape.Height += dy;
+                        shape.Offset(0, 0);
                         break;
                     case ResizeDirection.Left:
-                        selectedShape.Width -= dx;
-                        selectedShape.Offset(dx, 0);
+                        shape.Width -= dx;
+                        shape.Offset(dx, 0);
                         break;
                     case ResizeDirection.Right:
-                        selectedShape.Width += dx;
-                        selectedShape.Offset(0, 0);
+                        shape.Width += dx;
+                        shape.Offset(0, 0);
                         break;
                     case ResizeDirection.TopRight:
-                        selectedShape.Width += dx;
-                        selectedShape.Height -= dy;
-                        selectedShape.Offset(0, dy);
+                        shape.Width += dx;
+                        shape.Height -= dy;
+                        shape.Offset(0, dy);
                         break;
                     case ResizeDirection.BottomRight:
-                        selectedShape.Width += dx;
-                        selectedShape.Height += dy;
-                        selectedShape.Offset(0, 0);
+                        shape.Width += dx;
+                        shape.Height += dy;
+                        shape.Offset(0, 0);
                         break;
                     case ResizeDirection.TopLeft:
-                        selectedShape.Width -= dx;
-                        selectedShape.Height -= dy;
-                        selectedShape.Offset(dx, dy);
+                        shape.Width -= dx;
+                        shape.Height -= dy;
+                        shape.Offset(dx, dy);
                         break;
                     case ResizeDirection.BottomLeft:
-                        selectedShape.Width -= dx;
-                        selectedShape.Height += dy;
-                        selectedShape.Offset(dx, 0);
+                        shape.Width -= dx;
+                        shape.Height += dy;
+                        shape.Offset(dx, 0);
                         break;
                     case ResizeDirection.None:
                     default:
@@ -427,29 +450,36 @@ namespace WpfPaintProj.ExtraControls
             shape.SetCanvasPoint(point);    
         }
 
+        private UndoRedoManager undoManager;
+
 
         //private bool saveDoStory = true;
         private Point oldShapePosition = new Point(0,0);
+        private Size oldSize = new Size(0, 0);
 
-        private Stack<IUnReDo> undoStack = new Stack<IUnReDo>(1);
-        private Stack<IUnReDo> redoStack = new Stack<IUnReDo>(1);
+        //private Stack<IUnReDo> undoStack = new Stack<IUnReDo>(1);
+        //private Stack<IUnReDo> redoStack = new Stack<IUnReDo>(1);
 
         public void Undo()
         {
-            if (undoStack.Count == 0)
-                return;
-            IUnReDo action = undoStack.Pop();
-            action.Invoke();
-            redoStack.Push(action.GetInversedAction());
+            undoManager.Undo();
+
+            //if (undoStack.Count == 0)
+            //    return;
+            //IUnReDo action = undoStack.Pop();
+            //action.Invoke();
+            //redoStack.Push(action.GetInversedAction());
         }
 
         public void Redo()
         {
-            if (redoStack.Count == 0)
-                return;
-            IUnReDo action = redoStack.Pop();
-            action.Invoke();
-            undoStack.Push(action.GetInversedAction());
+            undoManager.Redo();
+
+            //if (redoStack.Count == 0)
+            //    return;
+            //IUnReDo action = redoStack.Pop();
+            //action.Invoke();
+            //undoStack.Push(action.GetInversedAction());
         }
 
     }
