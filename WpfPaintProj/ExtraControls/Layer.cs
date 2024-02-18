@@ -11,8 +11,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using WpfPaintProj.Helpers;
 using WpfPaintProj.UndoRedo;
-using WpfPaintProj.UndoRedo.Move;
-using WpfPaintProj.UndoRedo.Resize;
+
 
 namespace WpfPaintProj.ExtraControls
 {
