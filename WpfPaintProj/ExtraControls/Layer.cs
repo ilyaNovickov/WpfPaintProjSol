@@ -221,6 +221,7 @@ namespace WpfPaintProj.ExtraControls
                             else if (resizeShapes.Contains(clickedShape))
                             {
                                 this.oldSize = new Size(shape.Width, shape.Height);
+                                oldShapePosition = selectedShape.GetCanvasPoint();
                                 isResize = true;
                                 OnResizePointClicked(clickedShape);
                             }
