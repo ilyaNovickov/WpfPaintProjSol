@@ -72,7 +72,8 @@
                         </ScrollViewer>
                     </GroupBox>
                     <ListBox x:Name="shapesListBox" Grid.Row="2" 
-                             ItemsSource="{Binding Path=Shapes}"
+                             ItemsSource="{Binding Shapes}"
+                             DisplayMemberPath="Name"
                              SelectionChanged="shapesListBox_SelectionChanged">
                     </ListBox>
                 </Grid>

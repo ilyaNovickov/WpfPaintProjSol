@@ -25,7 +25,7 @@ namespace WpfPaintProj.ExtraControls
         }
 
         //Выбранная фигура
-        private Shape selectedShape = null;
+        private ShapeItem selectedShape = new ShapeItem(null);
 
         //Фигура для перемещения
         private Shape moveShape = null;
@@ -61,11 +61,14 @@ namespace WpfPaintProj.ExtraControls
 
         public Shape SelectedShape
         {
-            get => selectedShape;
+            get => selectedShape != null ? selectedShape.Shape : null;
             set
             {
-                Shape prevValue = selectedShape;
-                selectedShape = value;
+                Shape prevValue = selectedShape.Shape;
+
+                if (value == selectedShape.Shape)
+                    return;
+                //selectedShape.Shape = value;
 
                 //Очистка от вспомогательных фигур
                 foreach (Shape shape in controlShapes)
@@ -75,9 +78,11 @@ namespace WpfPaintProj.ExtraControls
                 controlShapes.Clear();
                 resizeShapes.Clear();
 
-                if (selectedShape != null)
+                selectedShape.Shape = value;//Shapes[this.Children.IndexOf(value)];
+
+                if (SelectedShape != null)
                 {
-                    GetControlPoints(selectedShape);
+                    GetControlPoints(SelectedShape);
                 }
 
                 //if (prevValue != value)
@@ -124,8 +129,8 @@ namespace WpfPaintProj.ExtraControls
             rect.Height = 10;
             rect.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
             rect.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-            Canvas.SetLeft(rect, Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d - rect.Width / 2d);
-            Canvas.SetTop(rect, Canvas.GetTop(selectedShape) + selectedShape.Height / 2d - rect.Height / 2d);
+            Canvas.SetLeft(rect, Canvas.GetLeft(SelectedShape) + SelectedShape.Width / 2d - rect.Width / 2d);
+            Canvas.SetTop(rect, Canvas.GetTop(SelectedShape) + SelectedShape.Height / 2d - rect.Height / 2d);
             controlShapes.Add(rect);
             this.Children.Add(rect);
             moveShape = rect;
@@ -140,12 +145,16 @@ namespace WpfPaintProj.ExtraControls
         {
             this.Children.Add(shape);
             ShapeItem shapeItem = new ShapeItem(shape);
+            //selectedShape = shapeItem;
+            
+            this.ShapeMoved += shapeItem.Shape_Moved;
             shapes.Add(shapeItem);
         }
 
         private void _AddShape(Shape shape)
         {
             __AddShape(shape);
+            SelectedShape = shape;
             undoManager.RegistrAction(new AddDoRe(this, new AddRemoveDo(shape)));
             //undoStack.Push(new AddDoAction(this.__AddShape,
             //    this.__RemoveShape, new AddRemoveDoArgs() { Shape = shape }));
@@ -160,14 +169,18 @@ namespace WpfPaintProj.ExtraControls
 
         internal void __RemoveShape(Shape shape)
         {
-            List<ShapeItem> extra = shapes.ToList();
-            int index = extra.IndexOf(new ShapeItem(shape));
+            //List<ShapeItem> extra = shapes.ToList();
+            
+            
+            int index = Children.IndexOf(shape);
             if (index == -1)
                 return;
+            this.ShapeMoved -= shapes.ElementAt(index).Shape_Moved;
             shapes.RemoveAt(index);
+            
             this.Children.RemoveAt(index);
 
-            if (selectedShape == shape)
+            if (SelectedShape == shape)
                 SelectedShape = null;
         }
 
@@ -183,8 +196,9 @@ namespace WpfPaintProj.ExtraControls
 
         public void RemoveSelectedShape()
         {
-            RemoveShape(selectedShape);
+            RemoveShape(SelectedShape);
             SelectedShape = null;
+
         }
 #endregion
 
@@ -214,13 +228,13 @@ namespace WpfPaintProj.ExtraControls
                             {
                                 this.Cursor = Cursors.SizeAll;
                                 isDragging = true;
-                                oldShapePosition = selectedShape.GetCanvasPoint();
+                                oldShapePosition = SelectedShape.GetCanvasPoint();
                             }
                             //Попало в точку для изменения размера
                             else if (resizeShapes.Contains(clickedShape))
                             {
                                 this.oldSize = new Size(shape.Width, shape.Height);
-                                oldShapePosition = selectedShape.GetCanvasPoint();
+                                oldShapePosition = SelectedShape.GetCanvasPoint();
                                 isResize = true;
                                 OnResizePointClicked(clickedShape);
                             }
@@ -286,9 +300,9 @@ namespace WpfPaintProj.ExtraControls
             //Удаление объекта вне видимости слоя
             if (isDragging)
             {
-                if (Canvas.GetRight(selectedShape) is double.NaN && Canvas.GetBottom(selectedShape) is double.NaN)
+                if (Canvas.GetRight(SelectedShape) is double.NaN && Canvas.GetBottom(SelectedShape) is double.NaN)
                 {
-                    this.Children.Remove(selectedShape);
+                    this.Children.Remove(SelectedShape);
                     SelectedShape = null;
                 }
             }
@@ -306,8 +320,8 @@ namespace WpfPaintProj.ExtraControls
             {
                 isDragging = false;
 
-                undoManager.RegistrAction(new MoveDoRe(this, new MoveDo(selectedShape, oldShapePosition,
-                    selectedShape.GetCanvasPoint())));
+                undoManager.RegistrAction(new MoveDoRe(this, new MoveDo(SelectedShape, oldShapePosition,
+                    SelectedShape.GetCanvasPoint())));
 
                 //undoStack.Push(new MoveDoAction(this.MoveShapeTo, 
                 //    this.MoveShapeTo, 
@@ -318,8 +332,8 @@ namespace WpfPaintProj.ExtraControls
             {
                 isResize = false;
 
-                undoManager.RegistrAction(new ResizeDoRe(this, new ResizeDo(selectedShape, oldShapePosition,
-                    selectedShape.GetCanvasPoint(), oldSize, new Size(selectedShape.Width, selectedShape.Height))));
+                undoManager.RegistrAction(new ResizeDoRe(this, new ResizeDo(SelectedShape, oldShapePosition,
+                    SelectedShape.GetCanvasPoint(), oldSize, new Size(SelectedShape.Width, SelectedShape.Height))));
 
                 //undoStack.Push(new ResizeDoAction(ResizeSelectedShape, ResizeSelectedShape, new ResizeArgs()
                 //{
@@ -333,6 +347,8 @@ namespace WpfPaintProj.ExtraControls
             this.Cursor = Cursors.Arrow;
         }
 
+        public event EventHandler<ShapeMovedArgs> ShapeMoved;
+
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
             //Перемещение фигуры
@@ -342,6 +358,8 @@ namespace WpfPaintProj.ExtraControls
 
                 MoveSelectedShape(pos.X - oldPoint.X, pos.Y - oldPoint.Y);
 
+                ShapeMoved?.Invoke(this, new ShapeMovedArgs(SelectedShape, SelectedShape.GetCanvasPoint(), oldPoint));
+
                 oldPoint = pos;
             }
             //Изменение размера фигуры
@@ -349,7 +367,9 @@ namespace WpfPaintProj.ExtraControls
             {
                 Point pos = e.GetPosition(this);
 
-                ResizeSelectedShape(selectedShape, this.resizeDirection, pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+                ResizeSelectedShape(SelectedShape, this.resizeDirection, pos.X - oldPoint.X, pos.Y - oldPoint.Y);
+
+                ShapeMoved?.Invoke(this, new ShapeMovedArgs(SelectedShape, SelectedShape.GetCanvasPoint(), oldPoint));
 
                 oldPoint = pos;
             }
@@ -359,16 +379,16 @@ namespace WpfPaintProj.ExtraControls
         private void OffsetPointsOnResizing()
         {
             int index = 0;
-            foreach (KeyValuePair<string, Point> pair in selectedShape.GetPointsofBorderControlPoints())
+            foreach (KeyValuePair<string, Point> pair in SelectedShape.GetPointsofBorderControlPoints())
             {
                 resizeShapes[index].SetCanvasCenterPoint(pair.Value.X, pair.Value.Y);
                 index++;
             }
-            moveShape.SetCanvasCenterPoint(Canvas.GetLeft(selectedShape) + selectedShape.Width / 2d,
-                Canvas.GetTop(selectedShape) + selectedShape.Height / 2d);
-            decoRect.SetCanvasPoint(selectedShape.GetCanvasPoint().X, selectedShape.GetCanvasPoint().Y);
-            decoRect.Width = selectedShape.Width;
-            decoRect.Height = selectedShape.Height;
+            moveShape.SetCanvasCenterPoint(Canvas.GetLeft(SelectedShape) + SelectedShape.Width / 2d,
+                Canvas.GetTop(SelectedShape) + SelectedShape.Height / 2d);
+            decoRect.SetCanvasPoint(SelectedShape.GetCanvasPoint().X, SelectedShape.GetCanvasPoint().Y);
+            decoRect.Width = SelectedShape.Width;
+            decoRect.Height = SelectedShape.Height;
         }
 
         //Изменение размера выбранной фигуры
@@ -426,7 +446,7 @@ namespace WpfPaintProj.ExtraControls
         //Перемещение выбранной фигуры
         private void MoveSelectedShape(double dx, double dy)
         {
-            selectedShape.Offset(dx, dy);
+            SelectedShape.Offset(dx, dy);
 
             foreach (Shape shapes in controlShapes)
             {
@@ -436,7 +456,7 @@ namespace WpfPaintProj.ExtraControls
 
         private void MoveShapeTo(Shape shape, Point point)
         {
-            if (shape == selectedShape)
+            if (shape == SelectedShape)
             {
                 double dx = point.X - shape.GetCanvasPoint().X;
                 double dy = point.Y - shape.GetCanvasPoint().Y;
@@ -462,6 +482,7 @@ namespace WpfPaintProj.ExtraControls
 
         public void Undo()
         {
+            ResetSelectedShape();
             undoManager.Undo();
 
             //if (undoStack.Count == 0)
@@ -473,6 +494,7 @@ namespace WpfPaintProj.ExtraControls
 
         public void Redo()
         {
+            ResetSelectedShape();
             undoManager.Redo();
 
             //if (redoStack.Count == 0)
@@ -482,5 +504,19 @@ namespace WpfPaintProj.ExtraControls
             //undoStack.Push(action.GetInversedAction());
         }
 
+    }
+
+    public struct ShapeMovedArgs
+    {
+        public ShapeMovedArgs(Shape shape, Point newPosition, Point oldPosition)
+        {
+            Shape = shape;
+            NewPosition = newPosition;
+            OldPosition = oldPosition;
+        }
+
+        public Shape Shape { get; }
+        public Point NewPosition { get; }
+        public Point OldPosition { get; }
     }
 }

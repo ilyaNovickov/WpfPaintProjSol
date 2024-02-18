@@ -26,11 +26,23 @@ namespace WpfPaintProj
     {
         private Layer selectedLayer = null;
 
-        public ObservableCollection<ShapeItem> Shapes => selectedLayer != null ? 
+        public ObservableCollection<ShapeItem> Shapes => selectedLayer != null ?
             new ObservableCollection<ShapeItem>(selectedLayer.Shapes) : null;//selectedLayer?.Shapes;
+
+        //public static readonly DependencyProperty TextProperty;
 
         private bool isDraw = false;
         private StandartShapes? selectedShape = null;
+
+        public Layer SelectedLayer
+        {
+            get => selectedLayer;
+            set
+            {
+                selectedLayer = value;
+                //OnPropertyChanged(new DependencyPropertyChangedEventArgs());
+            }
+        }
 
         public MainWindow()
         {
@@ -137,7 +149,7 @@ namespace WpfPaintProj
             if (drawingControl.Layers.Count != 0)
                 return;
             this.drawingControl.AddLayer();
-            selectedLayer = drawingControl.Layers.Last();
+            SelectedLayer = drawingControl.Layers.Last();
             selectedLayer.Background = Brushes.White;
             selectedLayer.MouseDown += canvas_MouseDown;
             selectedLayer.SelectedShapeChange += SelectedLayer_SelectedShapeChange;
@@ -150,6 +162,10 @@ namespace WpfPaintProj
         private void SelectedLayer_SelectedShapeChange(object sender, EventArgs e)
         {
             int index = -1;
+
+            if (selectedLayer.SelectedShape == null)
+                return;
+
             for (int i = 0; i < shapesListBox.Items.Count; i++)
             {
                 if (((ShapeItem)shapesListBox.Items[i]).Shape == selectedLayer.SelectedShape)
