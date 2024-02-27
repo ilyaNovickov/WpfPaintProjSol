@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,14 +23,28 @@ namespace WpfPaintProj.ExtraControls
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class DrawingControl : UserControl
+    public partial class DrawingControl : UserControl, INotifyPropertyChanged
     {
         private ObservableCollection<Layer> drawingCanvas = new ObservableCollection<Layer>();
+
+        private Layer selectedLayer = null;
 
         public DrawingControl()
         {
             InitializeComponent();
         }
+
+        public Layer SelectedLayer
+        {
+            get => selectedLayer;
+            
+            set
+            {
+                selectedLayer = value;
+                OnPropertyChanged("SelectedLayer");
+            }
+        }
+
         #region ForCollection
         public ObservableCollection<Layer> Layers
         {
@@ -119,5 +135,13 @@ namespace WpfPaintProj.ExtraControls
             drawingCanvas.First().Redo();
         }
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
     }
 }
