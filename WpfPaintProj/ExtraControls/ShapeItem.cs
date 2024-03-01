@@ -12,26 +12,19 @@ namespace WpfPaintProj.ExtraControls
 {
     public class ShapeItem : INotifyPropertyChanged
     {
-        //private PropertyChangedEventHandler propertyChanged;
         private string name;
         private Shape shape;
 
         public ShapeItem(Shape shape)
         {
-            Shape = shape;
+            this.shape = shape;
             Name = GetPosition();
-            //propertyChanged = null;
             PropertyChanged = null;
         }
 
         public Shape Shape 
         {
             get => shape;
-            set
-            {
-                shape = value;
-                Name = GetPosition();
-            }
         }
 
         public string Name 

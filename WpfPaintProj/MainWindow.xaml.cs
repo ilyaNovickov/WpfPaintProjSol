@@ -26,8 +26,8 @@ namespace WpfPaintProj
     {
         private Layer selectedLayer = null;
 
-        public ObservableCollection<ShapeItem> Shapes => selectedLayer != null ?
-            new ObservableCollection<ShapeItem>(selectedLayer.Shapes) : null;//selectedLayer?.Shapes;
+        //public ObservableCollection<ShapeItem> Shapes => selectedLayer != null ?
+        //    new ObservableCollection<ShapeItem>(selectedLayer.Shapes) : null;//selectedLayer?.Shapes;
 
         //public static readonly DependencyProperty TextProperty;
 
@@ -148,15 +148,17 @@ namespace WpfPaintProj
         {
             if (drawingControl.Layers.Count != 0)
                 return;
+
             this.drawingControl.AddLayer();
             SelectedLayer = drawingControl.Layers.Last();
             selectedLayer.Background = Brushes.White;
             selectedLayer.MouseDown += canvas_MouseDown;
-            selectedLayer.SelectedShapeChange += SelectedLayer_SelectedShapeChange;
+            selectedLayer.SelectedShapeChanged += SelectedLayer_SelectedShapeChange;
             selectedLayer.Width = 500;
             selectedLayer.Height = 500;
 
-            shapesListBox.ItemsSource = selectedLayer.Shapes;
+            //shapesListBox.ItemsSource = selectedLayer.Shapes;
+            //shapesListBox.DisplayMemberPath = "Name";
         }
         #region Select shape
         private void SelectedLayer_SelectedShapeChange(object sender, EventArgs e)
@@ -204,12 +206,12 @@ namespace WpfPaintProj
             selectedLayer?.RemoveSelectedShape();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Undo_Button_Click(object sender, RoutedEventArgs e)
         {
             this.drawingControl.Undo();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Redo_Button_Click(object sender, RoutedEventArgs e)
         {
             this.drawingControl.Redo();
         }
