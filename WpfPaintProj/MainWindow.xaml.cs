@@ -157,8 +157,8 @@ namespace WpfPaintProj
             selectedLayer.Width = 500;
             selectedLayer.Height = 500;
 
-            //shapesListBox.ItemsSource = selectedLayer.Shapes;
-            //shapesListBox.DisplayMemberPath = "Name";
+            shapesListBox.ItemsSource = selectedLayer.Shapes;
+            shapesListBox.DisplayMemberPath = "Name";
         }
         #region Select shape
         private void SelectedLayer_SelectedShapeChange(object sender, EventArgs e)
