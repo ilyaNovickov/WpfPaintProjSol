@@ -96,17 +96,31 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                         </Grid>
-                        <ListBox x:Name="layersListBox" SelectedItem="{Binding ElementName=drawingControl, Path=SelectedLayer}" Grid.Row="0" Grid.Column="1">
+                        <ListBox x:Name="layersListBox" Grid.Row="0" Grid.Column="1">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="0.9*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="0.5*"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0"/>
-                                        <Button Content="asd" Grid.Column="1"/>
+
+                                        <TextBlock Text="{Binding Name}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Grid.Column="0"/>
+               
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Background="Green">
+                                            <Button Content="asd"/>
+                                            <Button Content="asd" />
+                                            <Button Content="asd1"/>
+                                        </StackPanel>
                                     </Grid>
+                                    <!--<DockPanel Background="Coral">
+                                        <TextBlock DockPanel.Dock="Left" Text="{Binding Name}"  VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" Background="Green">
+                                            <Button Content="asd"/>
+                                            <Button Content="asd" />
+                                            <Button Content="asd1"/>
+                                        </StackPanel>
+                                    </DockPanel>-->
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
