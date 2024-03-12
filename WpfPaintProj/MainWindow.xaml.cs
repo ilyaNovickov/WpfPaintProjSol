@@ -47,6 +47,9 @@ namespace WpfPaintProj
         public MainWindow()
         {
             InitializeComponent();
+
+            layersListBox.ItemsSource = drawingControl.Layers;
+
         }
 
         private void ShapeButton_Click(object sender, RoutedEventArgs e)
@@ -150,7 +153,7 @@ namespace WpfPaintProj
                 return;
 
             this.drawingControl.AddLayer();
-            SelectedLayer = drawingControl.Layers.Last();
+            SelectedLayer = drawingControl.Layers.Last().Layer;
             selectedLayer.Background = Brushes.White;
             selectedLayer.MouseDown += canvas_MouseDown;
             selectedLayer.SelectedShapeChanged += SelectedLayer_SelectedShapeChange;
@@ -159,6 +162,10 @@ namespace WpfPaintProj
 
             shapesListBox.ItemsSource = selectedLayer.Shapes;
             shapesListBox.DisplayMemberPath = "Name";
+
+            Layer layer = new Layer();
+            layer.AddShape(new Ellipse() { Width=100d, Height=100d, Fill = Brushes.Green});
+            this.drawingControl.AddLayer(layer);
         }
         #region Select shape
         private void SelectedLayer_SelectedShapeChange(object sender, EventArgs e)
@@ -196,8 +203,8 @@ namespace WpfPaintProj
             if (e.AddedItems.Count == 0)
                 return;
 
-            int index = drawingControl.Layers.First().Shapes.IndexOf((ShapeItem)e.AddedItems[0]);
-            drawingControl.Layers.First().SelectedShape = drawingControl.Layers.First().Shapes[index].Shape;
+            int index = drawingControl.Layers.First().Layer.Shapes.IndexOf((ShapeItem)e.AddedItems[0]);
+            drawingControl.Layers.First().Layer.SelectedShape = drawingControl.Layers.First().Layer.Shapes[index].Shape;
         }
         #endregion
 

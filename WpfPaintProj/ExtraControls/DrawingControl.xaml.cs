@@ -25,7 +25,8 @@ namespace WpfPaintProj.ExtraControls
     /// </summary>
     public partial class DrawingControl : UserControl, INotifyPropertyChanged
     {
-        private ObservableCollection<Layer> drawingCanvas = new ObservableCollection<Layer>();
+        private List<Layer> layers = new List<Layer>();
+        private ObservableCollection<LayerItem> drawingCanvas = new ObservableCollection<LayerItem>();
 
         private Layer selectedLayer = null;
 
@@ -46,7 +47,7 @@ namespace WpfPaintProj.ExtraControls
         }
 
         #region ForCollection
-        public ObservableCollection<Layer> Layers
+        public ObservableCollection<LayerItem> Layers
         {
             get => drawingCanvas;
         }
@@ -56,10 +57,11 @@ namespace WpfPaintProj.ExtraControls
             Layer layer = new Layer();
             layer.Width = 100;
             layer.Height = 100;
-            drawingCanvas.Add(layer);
             layer.SizeChanged += Layer_SizeChanged;
-            this.canvas.Children.Add(drawingCanvas.Last());
+            this.canvas.Children.Add(layer);//drawingCanvas.Last());
             UpdateSize(layer);
+            drawingCanvas.Add(new LayerItem("test" + drawingCanvas.Count, layer));
+            layers.Add(layer);
         }
 
         private void Layer_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -71,25 +73,26 @@ namespace WpfPaintProj.ExtraControls
 
         public void AddLayer(Layer canvas)
         {
-            drawingCanvas.Add(canvas);
             this.canvas.Children.Add(canvas);
             canvas.SizeChanged += Layer_SizeChanged;
             UpdateSize(canvas);
+            drawingCanvas.Add(new LayerItem("test" + drawingCanvas.Count, canvas));
+            layers.Add(canvas);
         }
 
-        public void RemoveLayer(Layer canvas)
-        {
-            drawingCanvas.Remove(canvas);
-            this.canvas.Children.Remove(canvas);
-            UpdateSize();
-        }
+        //public void RemoveLayer(Layer canvas)
+        //{
+        //    drawingCanvas.Remove(canvas);
+        //    this.canvas.Children.Remove(canvas);
+        //    UpdateSize();
+        //}
 
-        public void RemoveLayerAt(int index)
-        {
-            drawingCanvas.RemoveAt(index);
-            this.canvas.Children.RemoveAt(index);
-            UpdateSize();
-        }
+        //public void RemoveLayerAt(int index)
+        //{
+        //    drawingCanvas.RemoveAt(index);
+        //    this.canvas.Children.RemoveAt(index);
+        //    UpdateSize();
+        //}
 
         public void UpdateSize(Layer layer)
         {
@@ -107,7 +110,7 @@ namespace WpfPaintProj.ExtraControls
         {
             Size maxSize = new Size(0, 0);
 
-            foreach (Layer layer in this.drawingCanvas)
+            foreach (Layer layer in this.layers)
             {
                 if (layer.Width > maxSize.Width)
                 {
@@ -127,12 +130,12 @@ namespace WpfPaintProj.ExtraControls
         #region ForUndo
         public void Undo()
         {
-            drawingCanvas.First().Undo();
+            layers.First().Undo();
         }
 
         public void Redo()
         {
-            drawingCanvas.First().Redo();
+            layers.First().Redo();
         }
         #endregion
 

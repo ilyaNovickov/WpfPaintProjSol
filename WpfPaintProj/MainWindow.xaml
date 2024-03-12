@@ -96,8 +96,19 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                         </Grid>
-                        <ListBox Grid.Row="0" Grid.Column="1">
-                            <ListBoxItem>sadas</ListBoxItem>
+                        <ListBox x:Name="layersListBox" SelectedItem="{Binding ElementName=drawingControl, Path=SelectedLayer}" Grid.Row="0" Grid.Column="1">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="0.9*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0"/>
+                                        <Button Content="asd" Grid.Column="1"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
                         </ListBox>
                         <Grid Grid.Row="1" Grid.Column="1">
                             <Button>sada</Button>
